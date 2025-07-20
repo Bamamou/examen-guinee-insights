@@ -124,7 +124,7 @@ const Index = () => {
           <div className="mt-12 pt-8 border-t border-border/20 text-center">
             <div className="p-4 bg-gradient-neumorphic-inset rounded-2xl shadow-neumorphic-inset inline-block">
               <p className="text-muted-foreground font-medium">
-                &copy; Examens en Guinée. Sponsorisé par GS Saint Jean, Tous droits réservés.
+                &copy; Examens en Guinée. Sponsorisé par le GS Saint Jean de N'ZEREKORE, Tous droits réservés.
               </p>
             </div>
           </div>

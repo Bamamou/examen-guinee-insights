@@ -3,18 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { User, School, MapPin, Award, ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
-
-interface Student {
-  id: string;
-  name: string;
-  pv: string;
-  school: string;
-  region: string;
-  grade: string;
-  passed: boolean;
-  average: number;
-}
+import { useState, useEffect } from "react";
+import { examAPI, ExamResult } from '../lib/api';
 
 interface ResultsTableProps {
   searchQuery: string;
@@ -23,95 +13,56 @@ interface ResultsTableProps {
   selectedYear: string;
 }
 
-// Mock data - replace with real data
-const mockStudents: Student[] = [
-  {
-    id: "1",
-    name: "Diallo Mamadou",
-    pv: "PV001-2025",
-    school: "Lycée Donka",
-    region: "Conakry",
-    grade: "Très Bien",
-    passed: true,
-    average: 16.5
-  },
-  {
-    id: "2",
-    name: "Camara Aissatou",
-    pv: "PV002-2025",
-    school: "Collège Sainte-Marie",
-    region: "Conakry",
-    grade: "Bien",
-    passed: true,
-    average: 14.2
-  },
-  {
-    id: "3",
-    name: "Barry Alpha",
-    pv: "PV003-2025",
-    school: "Lycée de Labé",
-    region: "Labé",
-    grade: "Assez Bien",
-    passed: true,
-    average: 12.8
-  },
-  {
-    id: "4",
-    name: "Condé Fatoumata",
-    pv: "PV004-2025",
-    school: "Institut Technique",
-    region: "Kankan",
-    grade: "Passable",
-    passed: true,
-    average: 10.5
-  },
-  {
-    id: "5",
-    name: "Touré Ibrahima",
-    pv: "PV005-2025",
-    school: "Lycée de Kindia",
-    region: "Kindia",
-    grade: "Échec",
-    passed: false,
-    average: 8.2
-  },
-  {
-    id: "6",
-    name: "Bah Mariame",
-    pv: "PV006-2025",
-    school: "Lycée Donka",
-    region: "Conakry",
-    grade: "Bien",
-    passed: true,
-    average: 13.9
-  }
-];
-
 export const ResultsTable = ({ searchQuery, searchType, selectedExam, selectedYear }: ResultsTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [results, setResults] = useState<ExamResult[]>([]);
+  const [totalResults, setTotalResults] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const resultsPerPage = 10;
 
-  // Filter results based on search
-  const filteredResults = mockStudents.filter(student => {
-    if (!searchQuery) return true;
-    
-    const query = searchQuery.toLowerCase();
-    switch (searchType) {
-      case "name":
-        return student.name.toLowerCase().includes(query);
-      case "pv":
-        return student.pv.toLowerCase().includes(query);
-      case "school":
-        return student.school.toLowerCase().includes(query);
-      default:
-        return true;
-    }
-  });
+  // Fetch results when search parameters change
+  useEffect(() => {
+    const fetchResults = async () => {
+      if (!searchQuery) {
+        setResults([]);
+        setTotalResults(0);
+        return;
+      }
 
-  // Pagination
-  const totalPages = Math.ceil(filteredResults.length / resultsPerPage);
-  const startIndex = (currentPage - 1) * resultsPerPage;
-  const paginatedResults = filteredResults.slice(startIndex, startIndex + resultsPerPage);
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const filters = {
+          year: parseInt(selectedYear),
+          examType: selectedExam,
+          searchQuery,
+          searchType,
+          limit: resultsPerPage,
+          offset: (currentPage - 1) * resultsPerPage
+        };
+
+        const response = await examAPI.getExamResults(filters);
+        
+        if (response.success) {
+          setResults(response.data.results);
+          setTotalResults(response.data.total);
+        } else {
+          setError(response.message || 'Failed to fetch results');
+        }
+      } catch (err) {
+        setError('Failed to connect to server');
+        console.error('Search error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResults();
+  }, [searchQuery, searchType, selectedExam, selectedYear, currentPage]);
+
+  const totalPages = Math.ceil(totalResults / resultsPerPage);
 
   const getGradeBadge = (grade: string, passed: boolean) => {
     if (!passed) {
@@ -161,12 +112,28 @@ export const ResultsTable = ({ searchQuery, searchType, selectedExam, selectedYe
             </CardTitle>
           </div>
           <Badge variant="outline" className="px-6 py-3 text-base rounded-2xl">
-            {filteredResults.length} résultat{filteredResults.length !== 1 ? 's' : ''} trouvé{filteredResults.length !== 1 ? 's' : ''}
+            {totalResults} résultat{totalResults !== 1 ? 's' : ''} trouvé{totalResults !== 1 ? 's' : ''}
           </Badge>
         </div>
       </CardHeader>
       <CardContent className="p-8">
-        {filteredResults.length === 0 ? (
+        {loading ? (
+          <div className="text-center py-16">
+            <div className="p-6 bg-gradient-neumorphic rounded-3xl shadow-neumorphic-sm inline-block mb-6">
+              <User className="h-16 w-16 mx-auto animate-pulse opacity-50" />
+            </div>
+            <h3 className="text-2xl font-bold mb-4">Recherche en cours...</h3>
+            <p className="text-lg text-muted-foreground">Veuillez patienter pendant la recherche.</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-16 text-destructive">
+            <div className="p-6 bg-gradient-neumorphic rounded-3xl shadow-neumorphic-sm inline-block mb-6">
+              <User className="h-16 w-16 mx-auto opacity-50" />
+            </div>
+            <h3 className="text-2xl font-bold mb-4">Erreur de recherche</h3>
+            <p className="text-lg">{error}</p>
+          </div>
+        ) : results.length === 0 ? (
           <div className="text-center py-16 text-muted-foreground">
             <div className="p-6 bg-gradient-neumorphic rounded-3xl shadow-neumorphic-sm inline-block mb-6">
               <User className="h-16 w-16 mx-auto opacity-50" />
@@ -199,29 +166,24 @@ export const ResultsTable = ({ searchQuery, searchType, selectedExam, selectedYe
                         Région
                       </div>
                     </TableHead>
-                    <TableHead className="font-bold text-base">Moyenne</TableHead>
+                    <TableHead className="font-bold text-base">Rang</TableHead>
                     <TableHead className="font-bold text-base">Résultat</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paginatedResults.map((student) => (
-                    <TableRow key={student.id} className="hover:bg-gradient-neumorphic-inset hover:shadow-neumorphic-inset border-border/20 transition-all duration-300">
-                      <TableCell className="font-semibold text-base py-4">{student.name}</TableCell>
-                      <TableCell className="font-mono text-sm py-4">{student.pv}</TableCell>
-                      <TableCell className="py-4">{student.school}</TableCell>
-                      <TableCell className="py-4">{student.region}</TableCell>
+                  {results.map((result) => (
+                    <TableRow key={result.id} className="hover:bg-gradient-neumorphic-inset hover:shadow-neumorphic-inset border-border/20 transition-all duration-300">
+                      <TableCell className="font-semibold text-base py-4">{result.student_name}</TableCell>
+                      <TableCell className="font-mono text-sm py-4">{result.pv_number}</TableCell>
+                      <TableCell className="py-4">{result.school_origin}</TableCell>
+                      <TableCell className="py-4">{result.region}</TableCell>
                       <TableCell className="py-4">
-                        <span className={`font-bold text-lg ${
-                          student.average >= 15 ? 'text-success' :
-                          student.average >= 12 ? 'text-accent' :
-                          student.average >= 10 ? 'text-warning' :
-                          'text-destructive'
-                        }`}>
-                          {student.average.toFixed(1)}/20
+                        <span className="font-bold text-lg text-muted-foreground">
+                          Rang #{result.rank}
                         </span>
                       </TableCell>
                       <TableCell className="py-4">
-                        {getGradeBadge(student.grade, student.passed)}
+                        {getGradeBadge(result.mention, Boolean(result.passed))}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -233,7 +195,7 @@ export const ResultsTable = ({ searchQuery, searchType, selectedExam, selectedYe
             {totalPages > 1 && (
               <div className="flex items-center justify-between mt-8 p-6 bg-gradient-neumorphic rounded-2xl shadow-neumorphic-sm">
                 <p className="text-base text-muted-foreground font-medium">
-                  Affichage de {startIndex + 1} à {Math.min(startIndex + resultsPerPage, filteredResults.length)} sur {filteredResults.length} résultats
+                  Affichage de {((currentPage - 1) * resultsPerPage) + 1} à {Math.min(currentPage * resultsPerPage, totalResults)} sur {totalResults} résultats
                 </p>
                 <div className="flex items-center gap-4">
                   <Button

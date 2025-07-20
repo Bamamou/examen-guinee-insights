@@ -89,8 +89,9 @@ export class CSVImporter {
       // Parse ex-aequo (X means ex-aequo)
       const exAequo = row.ex === 'X';
 
-      // Determine if passed based on mention
-      const passed = this.isPassingMention(mention);
+      // Determine if passed based on mention (empty mention = passed without specific mention)
+      const actualMention = mention || 'Non spécifié';
+      const passed = this.isPassingMention(actualMention);
 
       return {
         year: year,
@@ -102,7 +103,7 @@ export class CSVImporter {
         center,
         pv_number: pvNumber,
         school_origin: schoolOrigin || 'Non spécifié',
-        mention: mention || 'Non spécifié',
+        mention: actualMention,
         passed
       };
     } catch (error) {
@@ -119,8 +120,8 @@ export class CSVImporter {
   private isPassingMention(mention: string): boolean {
     if (!mention) return false;
     
-    const passingMentions = ['TBIEN', 'BIEN', 'ABIEN', 'PASSABLE'];
-    const normalizedMention = mention.toUpperCase().trim();
+    const passingMentions = ['TBIEN', 'BIEN', 'ABIEN', 'Non spécifié'];
+    const normalizedMention = mention.trim();
     
     return passingMentions.includes(normalizedMention);
   }

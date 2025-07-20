@@ -84,7 +84,7 @@ export class ExamService {
         SUM(CASE WHEN mention = 'TBIEN' THEN 1 ELSE 0 END) as tbien_count,
         SUM(CASE WHEN mention = 'BIEN' THEN 1 ELSE 0 END) as bien_count,
         SUM(CASE WHEN mention = 'ABIEN' THEN 1 ELSE 0 END) as assez_bien_count,
-        SUM(CASE WHEN mention = 'PASSABLE' THEN 1 ELSE 0 END) as passable_count
+        SUM(CASE WHEN mention = 'Non spécifié' THEN 1 ELSE 0 END) as passable_count
       FROM exam_results 
       WHERE year = ? AND exam_type = ?
       GROUP BY region
@@ -139,7 +139,7 @@ export class ExamService {
         SUM(CASE WHEN mention = 'TBIEN' THEN 1 ELSE 0 END) as tbien_count,
         SUM(CASE WHEN mention = 'BIEN' THEN 1 ELSE 0 END) as bien_count,
         SUM(CASE WHEN mention = 'ABIEN' THEN 1 ELSE 0 END) as assez_bien_count,
-        SUM(CASE WHEN mention = 'PASSABLE' THEN 1 ELSE 0 END) as passable_count
+        SUM(CASE WHEN mention = 'Non spécifié' THEN 1 ELSE 0 END) as passable_count
       FROM exam_results 
       WHERE year = ? AND exam_type = ?
     `, [year, examType]);
