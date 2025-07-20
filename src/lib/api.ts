@@ -1,6 +1,6 @@
 // API configuration and service layer for Guinea Exam Insights
 
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001'}/api`;
 
 // API Response types
 export interface ApiResponse<T> {

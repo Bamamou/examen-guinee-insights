@@ -7,8 +7,21 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
+const allowedOrigins = [
+  'http://localhost:8080', 
+  'http://localhost:8081', 
+  'http://localhost:5173', 
+  'http://localhost:3000', 
+  'http://127.0.0.1:5173', 
+  'http://127.0.0.1:8080',
+  'https://bamamou.github.io',
+  'https://bamamou.github.io/examen-guinee-insights'
+];
+
 app.use(cors({
-  origin: ['http://localhost:8080', 'http://localhost:8081', 'http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173', 'http://127.0.0.1:8080'],
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://bamamou.github.io', 'https://bamamou.github.io/examen-guinee-insights']
+    : allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept']

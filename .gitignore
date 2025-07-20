@@ -12,6 +12,14 @@ dist
 dist-ssr
 *.local
 
+# Environment files (keep .env.production and .env.development for deployment)
+.env
+.env.local
+
+# Database files (exclude large database, will be recreated on deployment)
+backend/data/*.db
+backend/data/*.db-journal
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
