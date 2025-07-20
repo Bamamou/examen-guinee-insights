@@ -163,10 +163,25 @@ export class ExamService {
       LIMIT 1
     `, [year, examType]);
 
+    // Use official statistics for BEPC 2025
+    // Based on official Guinea education ministry data:
+    // Total candidates: 180,141 (173,961 EG + 6,180 FA)
+    // Total admitted: 94,221 (90,749 EG + 3,472 FA)
+    // Official admission rate: 52.3%
+    let realTotalCandidates = totalCandidates.count;
+    let realPassRate = ((passedCandidates.count / totalCandidates.count) * 100);
+    
+    if (year === 2025 && examType === 'BEPC') {
+      // Our database contains only admitted students (94,221)
+      // Real total candidates from official stats: 180,141
+      realTotalCandidates = 180141;
+      realPassRate = 52.3; // Official admission rate
+    }
+
     return {
-      totalCandidates: totalCandidates.count,
+      totalCandidates: realTotalCandidates,
       passedCandidates: passedCandidates.count,
-      passRate: ((passedCandidates.count / totalCandidates.count) * 100),
+      passRate: Math.round(realPassRate * 100) / 100, // Round to 2 decimal places
       tbienCount: mentionStats.tbien_count || 0,
       bienCount: mentionStats.bien_count || 0,
       assezBienCount: mentionStats.assez_bien_count || 0,
