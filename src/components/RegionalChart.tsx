@@ -11,6 +11,7 @@ interface RegionalData {
 
 interface RegionalChartProps {
   data: RegionalData[];
+  examType: string;
 }
 
 const COLORS = [
@@ -24,13 +25,17 @@ const COLORS = [
   'hsl(280 60% 60%)'
 ];
 
-export const RegionalChart = ({ data }: RegionalChartProps) => {
+export const RegionalChart = ({ data, examType }: RegionalChartProps) => {
+  const isBac = examType.startsWith('BAC-');
+  const titleText = isBac ? 'Répartition par Centre' : 'Répartition des Candidats';
+  const labelText = isBac ? 'Centre' : 'Région';
+  
   return (
     <Card className="shadow-card">
       <CardHeader>
         <div className="flex items-center gap-2">
           <MapPin className="h-5 w-5 text-accent" />
-          <CardTitle>Répartition des Candidats</CardTitle>
+          <CardTitle>{titleText}</CardTitle>
         </div>
       </CardHeader>
       <CardContent>
@@ -52,7 +57,7 @@ export const RegionalChart = ({ data }: RegionalChartProps) => {
             </Pie>
             <Tooltip 
               formatter={(value: number) => [value.toLocaleString(), 'Candidats']}
-              labelFormatter={(label) => `Région: ${label}`}
+              labelFormatter={(label) => `${labelText}: ${label}`}
               contentStyle={{
                 backgroundColor: 'hsl(var(--card))',
                 border: '1px solid hsl(var(--border))',

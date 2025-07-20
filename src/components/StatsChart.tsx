@@ -11,15 +11,20 @@ interface RegionalData {
 
 interface StatsChartProps {
   data: RegionalData[];
+  examType: string;
 }
 
-export const StatsChart = ({ data }: StatsChartProps) => {
+export const StatsChart = ({ data, examType }: StatsChartProps) => {
+  const isBac = examType.startsWith('BAC-');
+  const titleText = isBac ? 'Taux de Réussite par Centre' : 'Taux de Réussite par Région';
+  const labelText = isBac ? 'Centre' : 'Région';
+  
   return (
     <Card className="shadow-card">
       <CardHeader>
         <div className="flex items-center gap-2">
           <TrendingUp className="h-5 w-5 text-primary" />
-          <CardTitle>Taux de Réussite par Région</CardTitle>
+          <CardTitle>{titleText}</CardTitle>
         </div>
       </CardHeader>
       <CardContent>
@@ -39,7 +44,7 @@ export const StatsChart = ({ data }: StatsChartProps) => {
             />
             <Tooltip 
               formatter={(value: number) => [`${value}%`, 'Taux de Réussite']}
-              labelFormatter={(label) => `Région: ${label}`}
+              labelFormatter={(label) => `${labelText}: ${label}`}
               contentStyle={{
                 backgroundColor: 'hsl(var(--card))',
                 border: '1px solid hsl(var(--border))',

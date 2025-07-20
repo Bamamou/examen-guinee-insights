@@ -235,7 +235,7 @@ export const Dashboard = ({ selectedYear, selectedExam }: DashboardProps) => {
           <CardHeader className="pb-4 p-0">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-semibold text-muted-foreground">
-                Régions Couvertes
+                {selectedExam.startsWith('BAC-') ? 'Centres d\'Examen' : 'Régions Couvertes'}
               </CardTitle>
               <div className="p-3 bg-gradient-neumorphic rounded-2xl shadow-neumorphic-sm">
                 <MapPin className="h-6 w-6 text-warning" />
@@ -247,7 +247,7 @@ export const Dashboard = ({ selectedYear, selectedExam }: DashboardProps) => {
               {stats.totalRegions}
             </div>
             <p className="text-sm text-muted-foreground mt-2">
-              Couverture nationale
+              {selectedExam.startsWith('BAC-') ? 'Centres disponibles' : 'Couverture nationale'}
             </p>
           </CardContent>
         </Card>
@@ -256,10 +256,10 @@ export const Dashboard = ({ selectedYear, selectedExam }: DashboardProps) => {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="p-6 bg-gradient-neumorphic rounded-3xl shadow-neumorphic border-0">
-          <StatsChart data={regionStats} />
+          <StatsChart data={regionStats} examType={selectedExam} />
         </div>
         <div className="p-6 bg-gradient-neumorphic rounded-3xl shadow-neumorphic border-0">
-          <RegionalChart data={regionStats} />
+          <RegionalChart data={regionStats} examType={selectedExam} />
         </div>
       </div>
 

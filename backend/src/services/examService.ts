@@ -74,6 +74,27 @@ export class ExamService {
   }
 
   async getRegionStats(year: number, examType: string): Promise<RegionStats[]> {
+    // For BAC exams, use exam centers instead of regions
+    if (examType.startsWith('BAC-')) {
+      return await this.getDb().all(`
+        SELECT 
+          center as region,
+          COUNT(*) as total_candidates,
+          SUM(CASE WHEN passed = 1 THEN 1 ELSE 0 END) as passed,
+          SUM(CASE WHEN passed = 0 THEN 1 ELSE 0 END) as failed,
+          ROUND((SUM(CASE WHEN passed = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*)), 2) as pass_rate,
+          SUM(CASE WHEN mention = 'TBIEN' THEN 1 ELSE 0 END) as tbien_count,
+          SUM(CASE WHEN mention = 'BIEN' THEN 1 ELSE 0 END) as bien_count,
+          SUM(CASE WHEN mention = 'ABIEN' THEN 1 ELSE 0 END) as assez_bien_count,
+          SUM(CASE WHEN mention = 'Non spécifié' THEN 1 ELSE 0 END) as passable_count
+        FROM exam_results 
+        WHERE year = ? AND exam_type = ?
+        GROUP BY center
+        ORDER BY pass_rate DESC, total_candidates DESC
+      `, [year, examType]);
+    }
+    
+    // For BEPC and CEE, use regions as before
     return await this.getDb().all(`
       SELECT 
         region,
