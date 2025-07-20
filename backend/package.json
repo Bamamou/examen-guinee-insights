@@ -8,8 +8,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "import-data": "ts-node src/scripts/importData.ts",
-    "render-build": "npm install && npm run build && node reImportData.js",
-    "render-start": "node dist/server.js"
+    "render-build": "npm install && npm run build",
+    "render-start": "mkdir -p data && node dist/server.js"
   },
   "dependencies": {
     "express": "^4.18.2",

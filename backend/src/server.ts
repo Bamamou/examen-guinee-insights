@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
 import { DatabaseManager } from './database/database';
+import { CSVImporter } from './utils/csvImporter';
 import examRoutes from './routes/examRoutes';
 
 const app = express();
@@ -67,6 +70,25 @@ async function startServer() {
     const db = DatabaseManager.getInstance();
     await db.initialize();
     console.log('✅ Database initialized successfully');
+
+    // Check if database has data, if not import it
+    const database = db.getDatabase();
+    const result = await database.get('SELECT COUNT(*) as count FROM exam_results');
+    
+    if (result.count === 0) {
+      console.log('📊 Database is empty, importing data...');
+      const dataDir = path.join(__dirname, '../data');
+      
+      if (fs.existsSync(dataDir)) {
+        const importer = new CSVImporter();
+        await importer.importMultipleFiles(dataDir, 2025, 'BEPC');
+        console.log('✅ Data import completed');
+      } else {
+        console.log('⚠️ No data directory found, starting with empty database');
+      }
+    } else {
+      console.log(`📊 Database has ${result.count} records`);
+    }
 
     // Start server
     app.listen(PORT, () => {
