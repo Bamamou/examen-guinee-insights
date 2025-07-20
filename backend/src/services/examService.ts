@@ -178,6 +178,27 @@ export class ExamService {
         // Official stats: Total candidates: 295,288, Admitted: 173,185
         realTotalCandidates = 295288; // Official total candidates from Guinea Ministry
         realPassRate = 58.65; // Official CEE admission rate (58.88% EG + 56.14% FA = 58.65% overall)
+      } else if (examType === 'BAC-SM') {
+        // BAC-SM 2025: Official statistics from DGECS
+        // Total registered: 20,885 T + 7,774 F = 28,659
+        // Total who took exam: 19,983 T + 7,508 F = 27,491
+        // Total admitted: 5,622 T + 1,726 F = 7,348
+        realTotalCandidates = 27491; // Candidates who actually took the exam
+        realPassRate = 26.74; // (7348/27491)*100 = 26.74%
+      } else if (examType === 'BAC-SE') {
+        // BAC-SE 2025: Official statistics from DGECS
+        // Total registered: 18,581 T + 9,517 F = 28,098
+        // Total who took exam: 17,702 T + 9,105 F = 26,807
+        // Total admitted: 6,095 T + 2,772 F = 8,867
+        realTotalCandidates = 26807; // Candidates who actually took the exam
+        realPassRate = 33.08; // (8867/26807)*100 = 33.08%
+      } else if (examType === 'BAC-SS') {
+        // BAC-SS 2025: Official statistics from DGECS
+        // Total registered: 31,637 T + 13,649 F = 45,286
+        // Total who took exam: 29,682 T + 12,883 F = 42,565
+        // Total admitted: 9,753 T + 3,639 F = 13,392
+        realTotalCandidates = 42565; // Candidates who actually took the exam
+        realPassRate = 31.46; // (13392/42565)*100 = 31.46%
       }
     }
 
