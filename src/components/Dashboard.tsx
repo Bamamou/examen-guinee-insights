@@ -13,29 +13,75 @@ import {
 } from "lucide-react";
 import { StatsChart } from "@/components/StatsChart";
 import { RegionalChart } from "@/components/RegionalChart";
-import { examAPI, DashboardStats, formatPassRate } from '../lib/api';
+import { examAPI, DashboardStats, SchoolStats, RegionStats, formatPassRate } from '../lib/api';
 
 interface DashboardProps {
   selectedYear: string;
   selectedExam: string;
 }
 
+interface TopSchool {
+  name: string;
+  region: string;
+  passRate: number;
+  students: number;
+}
+
+interface RegionalData {
+  region: string;
+  candidates: number;
+  passed: number;
+  passRate: number;
+}
+
 export const Dashboard = ({ selectedYear, selectedExam }: DashboardProps) => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [schoolStats, setSchoolStats] = useState<TopSchool[]>([]);
+  const [regionStats, setRegionStats] = useState<RegionalData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchDashboardStats = async () => {
+    const fetchDashboardData = async () => {
       try {
         setLoading(true);
         const year = parseInt(selectedYear);
-        const response = await examAPI.getDashboardStats(year, selectedExam);
-        if (response.success) {
-          setStats(response.data);
+        
+        // Fetch all data in parallel
+        const [dashboardResponse, schoolResponse, regionResponse] = await Promise.all([
+          examAPI.getDashboardStats(year, selectedExam),
+          examAPI.getSchoolStats(year, selectedExam),
+          examAPI.getRegionStats(year, selectedExam)
+        ]);
+
+        if (dashboardResponse.success) {
+          setStats(dashboardResponse.data);
         } else {
-          setError(response.message || 'Failed to fetch dashboard stats');
+          setError(dashboardResponse.message || 'Failed to fetch dashboard stats');
         }
+
+        if (schoolResponse.success) {
+          // Format school data for display
+          const formattedSchools = schoolResponse.data.slice(0, 5).map((school: SchoolStats) => ({
+            name: school.school,
+            region: school.region,
+            passRate: school.pass_rate,
+            students: school.total_candidates
+          }));
+          setSchoolStats(formattedSchools);
+        }
+
+        if (regionResponse.success) {
+          // Format region data for charts
+          const formattedRegions = regionResponse.data.map((region: RegionStats) => ({
+            region: region.region,
+            candidates: region.total_candidates,
+            passed: region.passed,
+            passRate: region.pass_rate
+          }));
+          setRegionStats(formattedRegions);
+        }
+
       } catch (err) {
         setError('Failed to connect to server. Please make sure the backend is running.');
         console.error('Dashboard error:', err);
@@ -45,7 +91,7 @@ export const Dashboard = ({ selectedYear, selectedExam }: DashboardProps) => {
     };
 
     if (selectedYear && selectedExam) {
-      fetchDashboardStats();
+      fetchDashboardData();
     }
   }, [selectedYear, selectedExam]);
 
@@ -92,29 +138,6 @@ export const Dashboard = ({ selectedYear, selectedExam }: DashboardProps) => {
       </Card>
     );
   }
-
-  // Top performing schools with realistic pass rates
-  // These are the best schools, so they perform above the national average of 52.3%
-  const topSchools = [
-    { name: "Lycée Donka", region: "Conakry", passRate: 78.5, students: 245 },
-    { name: "Collège Notre-Dame", region: "Kindia", passRate: 76.2, students: 189 },
-    { name: "École Primaire Centrale", region: "Conakry", passRate: 74.8, students: 198 },
-    { name: "Lycée Technique", region: "Kankan", passRate: 73.1, students: 156 },
-    { name: "Collège Sainte-Marie", region: "Conakry", passRate: 71.4, students: 167 }
-  ];
-
-  // Regional data based on official BEPC 2025 statistics
-  // Overall admission rate: 52.3% (94,221 admitted out of 180,141 candidates)
-  const regionalData = [
-    { region: "Conakry", candidates: 45320, passed: 26184, passRate: 57.8 },
-    { region: "Kankan", candidates: 28456, passed: 15691, passRate: 55.1 },
-    { region: "Labé", candidates: 22789, passed: 12234, passRate: 53.7 },
-    { region: "Kindia", candidates: 25432, passed: 13481, passRate: 53.0 },
-    { region: "Boké", candidates: 18934, passed: 9845, passRate: 52.0 },
-    { region: "Faranah", candidates: 15673, passed: 7998, passRate: 51.0 },
-    { region: "Mamou", candidates: 12845, passed: 6422, passRate: 50.0 },
-    { region: "N'Zérékoré", candidates: 10692, passed: 5166, passRate: 48.3 }
-  ];
 
   return (
     <div className="space-y-8">
@@ -226,10 +249,10 @@ export const Dashboard = ({ selectedYear, selectedExam }: DashboardProps) => {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="p-6 bg-gradient-neumorphic rounded-3xl shadow-neumorphic border-0">
-          <StatsChart data={regionalData} />
+          <StatsChart data={regionStats} />
         </div>
         <div className="p-6 bg-gradient-neumorphic rounded-3xl shadow-neumorphic border-0">
-          <RegionalChart data={regionalData} />
+          <RegionalChart data={regionStats} />
         </div>
       </div>
 
@@ -240,32 +263,40 @@ export const Dashboard = ({ selectedYear, selectedExam }: DashboardProps) => {
             <div className="p-3 bg-gradient-neumorphic rounded-2xl shadow-neumorphic-sm">
               <Trophy className="h-6 w-6 text-accent" />
             </div>
-            <CardTitle className="text-2xl font-bold">Meilleurs Établissements</CardTitle>
+            <CardTitle className="text-2xl font-bold">
+              Meilleurs Établissements - {selectedExam} {selectedYear}
+            </CardTitle>
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="space-y-6">
-            {topSchools.map((school, index) => (
-              <div 
-                key={school.name} 
-                className="flex items-center justify-between p-6 rounded-3xl bg-gradient-neumorphic-inset shadow-neumorphic-inset hover:shadow-neumorphic-pressed transition-all duration-300"
-              >
-                <div className="flex items-center gap-6">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-primary text-white font-bold text-lg shadow-neumorphic-sm">
-                    {index + 1}
+          {schoolStats.length > 0 ? (
+            <div className="space-y-6">
+              {schoolStats.map((school, index) => (
+                <div 
+                  key={`${school.name}-${school.region}`} 
+                  className="flex items-center justify-between p-6 rounded-3xl bg-gradient-neumorphic-inset shadow-neumorphic-inset hover:shadow-neumorphic-pressed transition-all duration-300"
+                >
+                  <div className="flex items-center gap-6">
+                    <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-primary text-white font-bold text-lg shadow-neumorphic-sm">
+                      {index + 1}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg text-foreground">{school.name}</h4>
+                      <p className="text-base text-muted-foreground">{school.region}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-bold text-lg text-foreground">{school.name}</h4>
-                    <p className="text-base text-muted-foreground">{school.region}</p>
+                  <div className="text-right">
+                    <div className="font-bold text-2xl text-success">{school.passRate}%</div>
+                    <div className="text-sm text-muted-foreground">{school.students} candidats</div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="font-bold text-2xl text-success">{school.passRate}%</div>
-                  <div className="text-sm text-muted-foreground">{school.students} candidats</div>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-muted-foreground py-8">
+              <p>Aucune donnée d'école disponible pour {selectedExam} {selectedYear}</p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
