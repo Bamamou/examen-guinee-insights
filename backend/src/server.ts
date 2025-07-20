@@ -35,6 +35,20 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/exam', examRoutes);
 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    success: true,
+    message: 'Guinea Exam Insights API is running',
+    version: '1.0.0',
+    endpoints: {
+      health: '/health',
+      api: '/api/exam'
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ 
