@@ -6,8 +6,8 @@ import { GraduationCap, Globe, Award } from "lucide-react";
 
 const Index = () => {
   const [selectedYear, setSelectedYear] = useState("2025");
-  const [selectedExam, setSelectedExam] = useState("BAC");
-  const [selectedBacOption, setSelectedBacOption] = useState<string>("SM"); // Default to SM
+  const [selectedExam, setSelectedExam] = useState("CEE");
+  const [selectedBacOption, setSelectedBacOption] = useState<string>(""); // No default BAC option
   const [searchQuery, setSearchQuery] = useState("");
   const [searchType, setSearchType] = useState("name");
 
