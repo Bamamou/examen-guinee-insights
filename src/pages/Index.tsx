@@ -7,12 +7,29 @@ import { GraduationCap, Globe, Award } from "lucide-react";
 const Index = () => {
   const [selectedYear, setSelectedYear] = useState("2025");
   const [selectedExam, setSelectedExam] = useState("BAC");
+  const [selectedBacOption, setSelectedBacOption] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchType, setSearchType] = useState("name");
 
   const handleSearch = () => {
     // This would trigger the search - for now it's just visual
-    console.log("Searching:", { searchQuery, searchType, selectedYear, selectedExam });
+    console.log("Searching:", { searchQuery, searchType, selectedYear, selectedExam, selectedBacOption });
+  };
+
+  // Get the full exam type for API calls (includes BAC option)
+  const getFullExamType = () => {
+    if (selectedExam === "BAC" && selectedBacOption) {
+      return `BAC-${selectedBacOption}`; // Use BAC-SE, BAC-SM, BAC-SS format
+    }
+    return selectedExam;
+  };
+
+  // Reset BAC option when exam type changes
+  const handleExamChange = (exam: string) => {
+    setSelectedExam(exam);
+    if (exam !== "BAC") {
+      setSelectedBacOption("");
+    }
   };
 
   return (
@@ -56,7 +73,9 @@ const Index = () => {
           selectedYear={selectedYear}
           setSelectedYear={setSelectedYear}
           selectedExam={selectedExam}
-          setSelectedExam={setSelectedExam}
+          setSelectedExam={handleExamChange}
+          selectedBacOption={selectedBacOption}
+          setSelectedBacOption={setSelectedBacOption}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           searchType={searchType}
@@ -68,14 +87,14 @@ const Index = () => {
         <ResultsTable
           searchQuery={searchQuery}
           searchType={searchType}
-          selectedExam={selectedExam}
+          selectedExam={getFullExamType()}
           selectedYear={selectedYear}
         />
 
         {/* Dashboard */}
         <Dashboard
           selectedYear={selectedYear}
-          selectedExam={selectedExam}
+          selectedExam={getFullExamType()}
         />
       </main>
 

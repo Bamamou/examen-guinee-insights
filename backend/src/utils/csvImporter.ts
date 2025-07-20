@@ -16,6 +16,17 @@ interface CSVRow {
   Mention: string;
 }
 
+interface BaccalaureatCSVRow {
+  Option: string;
+  Rang: string;
+  ex: string;
+  'Prénoms et Noms': string;
+  Centre: string;
+  PV: string;
+  Origine: string;
+  Mention: string;
+}
+
 export class CSVImporter {
   private examService = new ExamService();
 
@@ -58,6 +69,50 @@ export class CSVImporter {
         })
         .on('error', (error: Error) => {
           console.error('Error reading CSV file:', error);
+          reject(error);
+        });
+    });
+  }
+
+  async importBaccalaureatFromCSV(filePath: string, year: number, bacOption: string): Promise<void> {
+    const results: ExamResult[] = [];
+    let lineCount = 0;
+    
+    console.log(`Starting Baccalauréat import from ${filePath}`);
+    console.log(`Target: BAC-${bacOption} ${year}`);
+
+    return new Promise((resolve, reject) => {
+      fs.createReadStream(filePath)
+        .pipe(csv(['Option', 'Rang', 'ex', 'Prénoms et Noms', 'Centre', 'PV', 'Origine', 'Mention']))
+        .on('data', (row: BaccalaureatCSVRow) => {
+          try {
+            lineCount++;
+            // Skip the first line (title)
+            if (lineCount <= 1) {
+              return;
+            }
+
+            const examResult = this.parseBaccalaureatCSVRow(row, year, bacOption);
+            if (examResult) {
+              results.push(examResult);
+            }
+          } catch (error) {
+            console.error(`Error parsing Baccalauréat row:`, row, error);
+          }
+        })
+        .on('end', async () => {
+          try {
+            console.log(`Parsed ${results.length} Baccalauréat records from CSV`);
+            await this.examService.importExamData(results);
+            console.log(`Successfully imported ${results.length} Baccalauréat results`);
+            resolve();
+          } catch (error) {
+            console.error('Error importing Baccalauréat data to database:', error);
+            reject(error);
+          }
+        })
+        .on('error', (error: Error) => {
+          console.error('Error reading Baccalauréat CSV file:', error);
           reject(error);
         });
     });
@@ -109,6 +164,62 @@ export class CSVImporter {
       };
     } catch (error) {
       console.error('Error parsing CSV row:', error, row);
+      return null;
+    }
+  }
+
+  private parseBaccalaureatCSVRow(row: BaccalaureatCSVRow, year: number, bacOption: string): ExamResult | null {
+    try {
+      // Clean and validate data
+      const option = this.cleanString(row.Option);
+      const rankStr = this.cleanString(row.Rang);
+      const studentName = this.cleanString(row['Prénoms et Noms']);
+      const center = this.cleanString(row.Centre);
+      const pvNumber = this.cleanString(row.PV);
+      const schoolOrigin = this.cleanString(row.Origine);
+      const mention = this.cleanString(row.Mention);
+
+      // Validate required fields
+      if (!option || !rankStr || !studentName || !center || !pvNumber) {
+        console.warn('Skipping Baccalauréat row with missing required fields:', row);
+        return null;
+      }
+
+      // Validate that the option matches the expected one
+      if (option !== bacOption) {
+        console.warn(`Option mismatch: expected ${bacOption}, got ${option}`);
+        return null;
+      }
+
+      // Parse rank
+      const rank = parseInt(rankStr);
+      if (isNaN(rank)) {
+        console.warn('Invalid rank value:', rankStr);
+        return null;
+      }
+
+      // Parse ex-aequo (X means ex-aequo)
+      const exAequo = row.ex === 'X';
+
+      // Determine if passed based on mention
+      const actualMention = mention || 'Non spécifié';
+      const passed = this.isPassingMention(actualMention);
+
+      return {
+        year: year,
+        exam_type: `BAC-${bacOption}`, // Store as BAC-SE, BAC-SM, BAC-SS
+        region: 'Guinea', // Baccalauréat is national level
+        rank,
+        ex_aequo: exAequo,
+        student_name: studentName,
+        center,
+        pv_number: pvNumber,
+        school_origin: schoolOrigin || 'Non spécifié',
+        mention: actualMention,
+        passed
+      };
+    } catch (error) {
+      console.error('Error parsing Baccalauréat CSV row:', error, row);
       return null;
     }
   }

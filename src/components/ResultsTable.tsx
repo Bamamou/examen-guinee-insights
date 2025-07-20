@@ -30,6 +30,13 @@ export const ResultsTable = ({ searchQuery, searchType, selectedExam, selectedYe
         return;
       }
 
+      // Validate Baccalauréat selection
+      if (selectedExam === 'BAC') {
+        setError('Veuillez sélectionner une option pour le Baccalauréat (SM, SE, ou SS)');
+        setLoading(false);
+        return;
+      }
+
       try {
         setLoading(true);
         setError(null);

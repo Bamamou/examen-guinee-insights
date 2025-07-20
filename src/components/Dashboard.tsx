@@ -47,6 +47,13 @@ export const Dashboard = ({ selectedYear, selectedExam }: DashboardProps) => {
         setLoading(true);
         const year = parseInt(selectedYear);
         
+        // Validate Baccalauréat selection
+        if (selectedExam === 'BAC') {
+          setError('Veuillez sélectionner une option pour le Baccalauréat (SM, SE, ou SS)');
+          setLoading(false);
+          return;
+        }
+        
         // Fetch all data in parallel
         const [dashboardResponse, schoolResponse, regionResponse] = await Promise.all([
           examAPI.getDashboardStats(year, selectedExam),

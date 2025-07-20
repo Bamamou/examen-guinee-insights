@@ -11,6 +11,8 @@ interface SearchFiltersProps {
   setSelectedYear: (year: string) => void;
   selectedExam: string;
   setSelectedExam: (exam: string) => void;
+  selectedBacOption?: string;
+  setSelectedBacOption?: (option: string) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   searchType: string;
@@ -23,6 +25,8 @@ export const SearchFilters = ({
   setSelectedYear,
   selectedExam,
   setSelectedExam,
+  selectedBacOption,
+  setSelectedBacOption,
   searchQuery,
   setSearchQuery,
   searchType,
@@ -34,6 +38,11 @@ export const SearchFilters = ({
     { value: "BAC", label: "Baccalauréat", icon: GraduationCap },
     { value: "BEPC", label: "BEPC", icon: School },
     { value: "CEE", label: "Certificat d'Études Élémentaires", icon: User }
+  ];
+  const bacOptions = [
+    { value: "SM", label: "SM - Sciences Mathématiques", description: "Mathématiques et Sciences Physiques" },
+    { value: "SE", label: "SE - Sciences Expérimentales", description: "Sciences Biologiques et Chimiques" },
+    { value: "SS", label: "SS - Sciences Sociales", description: "Sciences Humaines et Sociales" }
   ];
   const searchTypes = [
     { value: "name", label: "Nom de l'étudiant", icon: User },
@@ -98,6 +107,38 @@ export const SearchFilters = ({
               </SelectContent>
             </Select>
           </div>
+
+          {/* Baccalauréat Option Selector - Only show when BAC is selected */}
+          {selectedExam === "BAC" && (
+            <div className="space-y-4">
+              <label className="text-base font-semibold flex items-center gap-3">
+                <div className="p-2 bg-gradient-neumorphic rounded-xl shadow-neumorphic-sm">
+                  <Filter className="h-5 w-5 text-accent" />
+                </div>
+                Option Baccalauréat
+              </label>
+              <Select value={selectedBacOption || ""} onValueChange={setSelectedBacOption}>
+                <SelectTrigger className="bg-gradient-neumorphic-inset shadow-neumorphic-inset border-0 rounded-2xl h-12">
+                  <SelectValue placeholder="Sélectionner une option" />
+                </SelectTrigger>
+                <SelectContent className="bg-gradient-neumorphic shadow-neumorphic border-0 rounded-xl">
+                  {bacOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value} className="rounded-lg">
+                      <div className="space-y-1">
+                        <div className="font-semibold">{option.label}</div>
+                        <div className="text-sm text-muted-foreground">{option.description}</div>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {selectedBacOption && (
+                <Badge variant="secondary" className="px-4 py-2 bg-gradient-neumorphic-inset shadow-neumorphic-inset border-0 rounded-xl">
+                  Option sélectionnée: {bacOptions.find(opt => opt.value === selectedBacOption)?.label}
+                </Badge>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Search Section */}

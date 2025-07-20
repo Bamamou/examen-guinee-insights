@@ -99,17 +99,20 @@ examen-guinee-insights/
 ## 📈 Data Capabilities
 
 ### Exam Results Management
-- **90,752 BEPC 2025 records** ready for import
-- **Regional Statistics**: Pass rates by region
+- **BEPC 2025**: 94,221 admitted students out of 180,141 candidates (52.3% admission rate)
+- **CEE 2025**: 173,185 admitted students out of 295,288 candidates (58.65% admission rate)
+- **Regional Statistics**: Pass rates by region for both exam types
 - **School Performance**: Institution rankings and metrics
 - **Student Search**: By name, PV number, or school
 - **Advanced Filtering**: Multiple criteria support
+- **Dynamic Rankings**: School rankings change based on selected exam type
 
 ### Analytics Dashboard
-- **Real-time Statistics**: Total candidates, pass rates, mentions
+- **Real-time Statistics**: Total candidates, accurate pass rates, mentions
+- **Exam-Specific Data**: Different statistics for BEPC vs CEE
 - **Regional Performance**: Interactive charts and comparisons
-- **School Rankings**: Top performing institutions
-- **Trend Analysis**: Year-over-year comparisons
+- **School Rankings**: Top performing institutions (dynamic per exam)
+- **Official Statistics**: Based on Guinea Ministry of Education data
 
 ## 🚀 Production Deployment
 

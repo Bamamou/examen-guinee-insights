@@ -120,6 +120,16 @@ async function startServer() {
           }
         }
         
+        // Import Baccalauréat data
+        const bacOptions = ['SE', 'SM', 'SS'];
+        for (const option of bacOptions) {
+          const bacFile = path.join(dataDir, `${option}.csv`);
+          if (fs.existsSync(bacFile)) {
+            console.log(`📚 Importing BAC-${option} data...`);
+            await importer.importBaccalaureatFromCSV(bacFile, 2025, option);
+          }
+        }
+        
         console.log('✅ Data import completed');
       } else {
         console.log('⚠️ No data directory found, starting with empty database');

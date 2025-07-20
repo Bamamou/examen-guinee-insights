@@ -174,11 +174,10 @@ export class ExamService {
         realTotalCandidates = 180141;
         realPassRate = 52.3; // Official BEPC admission rate
       } else if (examType === 'CEE') {
-        // CEE 2025: Our database contains only admitted students (159,384)
-        // CEE typically has higher admission rates than BEPC
-        // Estimating total candidates based on typical CEE patterns
-        realTotalCandidates = Math.round(totalCandidates.count / 0.75); // Assuming ~75% admission rate for CEE
-        realPassRate = 75.0; // Estimated CEE admission rate (typically higher than BEPC)
+        // CEE 2025: Our database contains only admitted students (173,185)
+        // Official stats: Total candidates: 295,288, Admitted: 173,185
+        realTotalCandidates = 295288; // Official total candidates from Guinea Ministry
+        realPassRate = 58.65; // Official CEE admission rate (58.88% EG + 56.14% FA = 58.65% overall)
       }
     }
 
