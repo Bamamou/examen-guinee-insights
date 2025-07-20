@@ -7,7 +7,7 @@ export class ExamService {
   }
 
   async getExamResults(filters: SearchFilters): Promise<{ results: ExamResult[], total: number }> {
-    let query = 'SELECT * FROM exam_results WHERE 1=1';
+    let query = 'SELECT DISTINCT * FROM exam_results WHERE 1=1';
     const params: (number | string)[] = [];
 
     if (filters.year) {
@@ -52,8 +52,8 @@ export class ExamService {
       }
     }
 
-    // Get total count
-    const countQuery = query.replace('SELECT *', 'SELECT COUNT(*) as count');
+    // Get total count (use DISTINCT for accurate count)
+    const countQuery = query.replace('SELECT DISTINCT *', 'SELECT COUNT(*) as count');
     const countResult = await this.getDb().get(countQuery, params);
     const total = countResult.count;
 
