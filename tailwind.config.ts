@@ -79,12 +79,17 @@ export default {
 			},
 			backgroundImage: {
 				'gradient-primary': 'var(--gradient-primary)',
-				'gradient-academic': 'var(--gradient-academic)',
+				'gradient-neumorphic': 'var(--gradient-neumorphic)',
+				'gradient-neumorphic-inset': 'var(--gradient-neumorphic-inset)',
 				'gradient-success': 'var(--gradient-success)',
 			},
 			boxShadow: {
 				'elegant': 'var(--shadow-elegant)',
 				'card': 'var(--shadow-card)',
+				'neumorphic': 'var(--shadow-neumorphic)',
+				'neumorphic-sm': 'var(--shadow-neumorphic-sm)',
+				'neumorphic-inset': 'var(--shadow-neumorphic-inset)',
+				'neumorphic-pressed': 'var(--shadow-neumorphic-pressed)',
 			},
 			keyframes: {
 				'accordion-down': {

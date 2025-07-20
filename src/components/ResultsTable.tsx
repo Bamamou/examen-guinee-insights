@@ -115,31 +115,33 @@ export const ResultsTable = ({ searchQuery, searchType, selectedExam, selectedYe
 
   const getGradeBadge = (grade: string, passed: boolean) => {
     if (!passed) {
-      return <Badge variant="destructive">{grade}</Badge>;
+      return <Badge variant="destructive" className="rounded-xl">{grade}</Badge>;
     }
     
     switch (grade) {
       case "Très Bien":
-        return <Badge className="bg-gradient-success">{grade}</Badge>;
+        return <Badge className="bg-gradient-success shadow-neumorphic-sm rounded-xl">{grade}</Badge>;
       case "Bien":
-        return <Badge className="bg-accent text-accent-foreground">{grade}</Badge>;
+        return <Badge className="bg-accent text-accent-foreground shadow-neumorphic-sm rounded-xl">{grade}</Badge>;
       case "Assez Bien":
-        return <Badge variant="secondary">{grade}</Badge>;
+        return <Badge variant="secondary" className="rounded-xl">{grade}</Badge>;
       case "Passable":
-        return <Badge variant="outline">{grade}</Badge>;
+        return <Badge variant="outline" className="rounded-xl">{grade}</Badge>;
       default:
-        return <Badge variant="secondary">{grade}</Badge>;
+        return <Badge variant="secondary" className="rounded-xl">{grade}</Badge>;
     }
   };
 
   if (!searchQuery) {
     return (
-      <Card className="shadow-card">
-        <CardContent className="py-12">
+      <Card className="shadow-neumorphic border-0 p-8">
+        <CardContent className="py-16 p-0">
           <div className="text-center text-muted-foreground">
-            <User className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <h3 className="text-lg font-medium mb-2">Rechercher des Résultats</h3>
-            <p>Utilisez les filtres ci-dessus pour rechercher des résultats d'examens spécifiques.</p>
+            <div className="p-6 bg-gradient-neumorphic rounded-3xl shadow-neumorphic-sm inline-block mb-6">
+              <User className="h-16 w-16 mx-auto opacity-50" />
+            </div>
+            <h3 className="text-2xl font-bold mb-4">Rechercher des Résultats</h3>
+            <p className="text-lg">Utilisez les filtres ci-dessus pour rechercher des résultats d'examens spécifiques.</p>
           </div>
         </CardContent>
       </Card>
@@ -147,65 +149,69 @@ export const ResultsTable = ({ searchQuery, searchType, selectedExam, selectedYe
   }
 
   return (
-    <Card className="shadow-card">
-      <CardHeader>
+    <Card className="shadow-neumorphic border-0">
+      <CardHeader className="p-8 bg-gradient-to-r from-primary/5 to-accent/5">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Award className="h-5 w-5 text-primary" />
-            <CardTitle>
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-gradient-neumorphic rounded-2xl shadow-neumorphic-sm">
+              <Award className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-2xl font-bold">
               Résultats de Recherche - {selectedExam} {selectedYear}
             </CardTitle>
           </div>
-          <Badge variant="outline" className="px-3 py-1">
+          <Badge variant="outline" className="px-6 py-3 text-base rounded-2xl">
             {filteredResults.length} résultat{filteredResults.length !== 1 ? 's' : ''} trouvé{filteredResults.length !== 1 ? 's' : ''}
           </Badge>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-8">
         {filteredResults.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
-            <User className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <h3 className="text-lg font-medium mb-2">Aucun résultat trouvé</h3>
-            <p>Aucun résultat ne correspond à votre recherche. Veuillez vérifier vos critères.</p>
+          <div className="text-center py-16 text-muted-foreground">
+            <div className="p-6 bg-gradient-neumorphic rounded-3xl shadow-neumorphic-sm inline-block mb-6">
+              <User className="h-16 w-16 mx-auto opacity-50" />
+            </div>
+            <h3 className="text-2xl font-bold mb-4">Aucun résultat trouvé</h3>
+            <p className="text-lg">Aucun résultat ne correspond à votre recherche. Veuillez vérifier vos critères.</p>
           </div>
         ) : (
           <>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto bg-gradient-neumorphic-inset rounded-3xl shadow-neumorphic-inset p-6">
               <Table>
                 <TableHeader>
-                  <TableRow>
-                    <TableHead>
-                      <div className="flex items-center gap-2">
-                        <User className="h-4 w-4" />
+                  <TableRow className="border-border/20">
+                    <TableHead className="font-bold text-base">
+                      <div className="flex items-center gap-3">
+                        <User className="h-5 w-5" />
                         Nom
                       </div>
                     </TableHead>
-                    <TableHead>PV</TableHead>
-                    <TableHead>
-                      <div className="flex items-center gap-2">
-                        <School className="h-4 w-4" />
+                    <TableHead className="font-bold text-base">PV</TableHead>
+                    <TableHead className="font-bold text-base">
+                      <div className="flex items-center gap-3">
+                        <School className="h-5 w-5" />
                         École
                       </div>
                     </TableHead>
-                    <TableHead>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4" />
+                    <TableHead className="font-bold text-base">
+                      <div className="flex items-center gap-3">
+                        <MapPin className="h-5 w-5" />
                         Région
                       </div>
                     </TableHead>
-                    <TableHead>Moyenne</TableHead>
-                    <TableHead>Résultat</TableHead>
+                    <TableHead className="font-bold text-base">Moyenne</TableHead>
+                    <TableHead className="font-bold text-base">Résultat</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {paginatedResults.map((student) => (
-                    <TableRow key={student.id} className="hover:bg-muted/50">
-                      <TableCell className="font-medium">{student.name}</TableCell>
-                      <TableCell className="font-mono text-sm">{student.pv}</TableCell>
-                      <TableCell>{student.school}</TableCell>
-                      <TableCell>{student.region}</TableCell>
-                      <TableCell>
-                        <span className={`font-semibold ${
+                    <TableRow key={student.id} className="hover:bg-gradient-neumorphic-inset hover:shadow-neumorphic-inset border-border/20 transition-all duration-300">
+                      <TableCell className="font-semibold text-base py-4">{student.name}</TableCell>
+                      <TableCell className="font-mono text-sm py-4">{student.pv}</TableCell>
+                      <TableCell className="py-4">{student.school}</TableCell>
+                      <TableCell className="py-4">{student.region}</TableCell>
+                      <TableCell className="py-4">
+                        <span className={`font-bold text-lg ${
                           student.average >= 15 ? 'text-success' :
                           student.average >= 12 ? 'text-accent' :
                           student.average >= 10 ? 'text-warning' :
@@ -214,7 +220,7 @@ export const ResultsTable = ({ searchQuery, searchType, selectedExam, selectedYe
                           {student.average.toFixed(1)}/20
                         </span>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="py-4">
                         {getGradeBadge(student.grade, student.passed)}
                       </TableCell>
                     </TableRow>
@@ -225,31 +231,33 @@ export const ResultsTable = ({ searchQuery, searchType, selectedExam, selectedYe
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-between mt-6">
-                <p className="text-sm text-muted-foreground">
+              <div className="flex items-center justify-between mt-8 p-6 bg-gradient-neumorphic rounded-2xl shadow-neumorphic-sm">
+                <p className="text-base text-muted-foreground font-medium">
                   Affichage de {startIndex + 1} à {Math.min(startIndex + resultsPerPage, filteredResults.length)} sur {filteredResults.length} résultats
                 </p>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-4">
                   <Button
                     variant="outline"
-                    size="sm"
+                    size="lg"
                     onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
+                    className="rounded-2xl"
                   >
-                    <ChevronLeft className="h-4 w-4" />
+                    <ChevronLeft className="h-5 w-5 mr-2" />
                     Précédent
                   </Button>
-                  <span className="text-sm px-3 py-1 bg-muted rounded">
+                  <span className="text-base px-6 py-3 bg-gradient-neumorphic-inset shadow-neumorphic-inset rounded-2xl font-bold">
                     {currentPage} / {totalPages}
                   </span>
                   <Button
                     variant="outline"
-                    size="sm"
+                    size="lg"
                     onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                     disabled={currentPage === totalPages}
+                    className="rounded-2xl"
                   >
                     Suivant
-                    <ChevronRight className="h-4 w-4" />
+                    <ChevronRight className="h-5 w-5 ml-2" />
                   </Button>
                 </div>
               </div>

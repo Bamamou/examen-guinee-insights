@@ -8,49 +8,68 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 40 20% 97%;
-    --foreground: 210 25% 15%;
+    /* Neumorphic base colors - soft, natural palette */
+    --background: 210 20% 94%;
+    --foreground: 210 25% 20%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 210 25% 15%;
+    --card: 210 20% 94%;
+    --card-foreground: 210 25% 20%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 25% 15%;
+    --popover: 210 20% 94%;
+    --popover-foreground: 210 25% 20%;
 
-    --primary: 210 75% 35%;
+    /* Primary colors for neumorphic design */
+    --primary: 207 73% 52%;
     --primary-foreground: 0 0% 98%;
-    --primary-glow: 210 85% 55%;
+    --primary-glow: 207 83% 62%;
 
-    --secondary: 45 85% 88%;
-    --secondary-foreground: 210 25% 15%;
+    --secondary: 210 16% 82%;
+    --secondary-foreground: 210 25% 20%;
 
-    --muted: 210 40% 94%;
+    --muted: 210 16% 88%;
     --muted-foreground: 210 15% 45%;
 
-    --accent: 145 70% 45%;
+    --accent: 141 69% 58%;
     --accent-foreground: 0 0% 98%;
 
-    --success: 145 70% 45%;
+    --success: 141 69% 58%;
     --success-foreground: 0 0% 98%;
 
-    --warning: 45 95% 60%;
+    --warning: 38 92% 50%;
     --warning-foreground: 210 25% 15%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 65% 51%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 210 30% 88%;
-    --input: 210 30% 88%;
-    --ring: 210 75% 35%;
+    --border: 210 20% 85%;
+    --input: 210 20% 85%;
+    --ring: 207 73% 52%;
 
-    /* Academic themed gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-academic: linear-gradient(135deg, hsl(210 75% 35%), hsl(145 70% 45%));
-    --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(145 80% 65%));
+    /* Neumorphic shadows - key to the design */
+    --shadow-light: #ffffff;
+    --shadow-dark: rgba(163, 177, 198, 0.6);
     
-    /* Elegant shadows */
-    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.2);
-    --shadow-card: 0 4px 20px -5px hsl(210 25% 15% / 0.15);
+    /* Neumorphic gradients */
+    --gradient-primary: linear-gradient(145deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-neumorphic: linear-gradient(145deg, #e6e7ee, #ffffff);
+    --gradient-neumorphic-inset: linear-gradient(145deg, #d1d9e6, #f2f4f8);
+    --gradient-success: linear-gradient(145deg, hsl(var(--success)), hsl(141 79% 68%));
+    
+    /* Neumorphic shadows system */
+    --shadow-neumorphic: 
+      20px 20px 60px var(--shadow-dark),
+      -20px -20px 60px var(--shadow-light);
+    --shadow-neumorphic-sm: 
+      5px 5px 15px var(--shadow-dark),
+      -5px -5px 15px var(--shadow-light);
+    --shadow-neumorphic-inset: 
+      inset 5px 5px 15px var(--shadow-dark),
+      inset -5px -5px 15px var(--shadow-light);
+    --shadow-neumorphic-pressed: 
+      inset 10px 10px 20px var(--shadow-dark),
+      inset -10px -10px 20px var(--shadow-light);
+    --shadow-elegant: var(--shadow-neumorphic-sm);
+    --shadow-card: var(--shadow-neumorphic);
 
     --radius: 0.5rem;
 
@@ -117,5 +136,47 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Neumorphic hover animations */
+  .neumorphic-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .neumorphic-hover:hover {
+    transform: translateY(-2px);
+  }
+
+  .neumorphic-press {
+    transition: all 0.1s ease-in-out;
+  }
+
+  .neumorphic-press:active {
+    transform: scale(0.98);
+  }
+
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar for neumorphic design */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--gradient-neumorphic-inset);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, var(--shadow-dark), var(--shadow-light));
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--gradient-primary);
   }
 }

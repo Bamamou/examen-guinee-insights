@@ -42,28 +42,32 @@ export const SearchFilters = ({
   ];
 
   return (
-    <Card className="shadow-card bg-gradient-to-r from-card to-muted/20">
-      <CardHeader>
-        <div className="flex items-center gap-2">
-          <Search className="h-5 w-5 text-primary" />
-          <CardTitle>Recherche et Filtres</CardTitle>
+    <Card className="shadow-neumorphic bg-gradient-neumorphic border-0 overflow-hidden">
+      <CardHeader className="bg-gradient-to-r from-primary/5 to-accent/5 p-8">
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-gradient-neumorphic rounded-2xl shadow-neumorphic-sm">
+            <Search className="h-6 w-6 text-primary" />
+          </div>
+          <CardTitle className="text-2xl font-bold text-foreground">Recherche et Filtres</CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-8 p-8">
         {/* Primary Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-primary" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <label className="text-base font-semibold flex items-center gap-3">
+              <div className="p-2 bg-gradient-neumorphic rounded-xl shadow-neumorphic-sm">
+                <Calendar className="h-5 w-5 text-primary" />
+              </div>
               Année d'Examen
             </label>
             <Select value={selectedYear} onValueChange={setSelectedYear}>
-              <SelectTrigger className="bg-background">
+              <SelectTrigger className="bg-gradient-neumorphic-inset shadow-neumorphic-inset border-0 rounded-2xl h-12">
                 <SelectValue placeholder="Sélectionner une année" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-gradient-neumorphic shadow-neumorphic border-0 rounded-xl">
                 {years.map((year) => (
-                  <SelectItem key={year} value={year}>
+                  <SelectItem key={year} value={year} className="rounded-lg">
                     {year}
                   </SelectItem>
                 ))}
@@ -71,20 +75,22 @@ export const SearchFilters = ({
             </Select>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium flex items-center gap-2">
-              <GraduationCap className="h-4 w-4 text-primary" />
+          <div className="space-y-4">
+            <label className="text-base font-semibold flex items-center gap-3">
+              <div className="p-2 bg-gradient-neumorphic rounded-xl shadow-neumorphic-sm">
+                <GraduationCap className="h-5 w-5 text-primary" />
+              </div>
               Type d'Examen
             </label>
             <Select value={selectedExam} onValueChange={setSelectedExam}>
-              <SelectTrigger className="bg-background">
+              <SelectTrigger className="bg-gradient-neumorphic-inset shadow-neumorphic-inset border-0 rounded-2xl h-12">
                 <SelectValue placeholder="Sélectionner un examen" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-gradient-neumorphic shadow-neumorphic border-0 rounded-xl">
                 {exams.map((exam) => (
-                  <SelectItem key={exam.value} value={exam.value}>
-                    <div className="flex items-center gap-2">
-                      <exam.icon className="h-4 w-4" />
+                  <SelectItem key={exam.value} value={exam.value} className="rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <exam.icon className="h-5 w-5" />
                       {exam.label}
                     </div>
                   </SelectItem>
@@ -95,24 +101,26 @@ export const SearchFilters = ({
         </div>
 
         {/* Search Section */}
-        <div className="space-y-4 p-4 bg-muted/50 rounded-lg border">
-          <div className="flex items-center gap-2">
-            <Search className="h-4 w-4 text-accent" />
-            <h4 className="font-medium">Recherche de Résultats</h4>
+        <div className="space-y-6 p-6 bg-gradient-neumorphic-inset rounded-3xl shadow-neumorphic-inset border-0">
+          <div className="flex items-center gap-4">
+            <div className="p-2 bg-gradient-neumorphic rounded-xl shadow-neumorphic-sm">
+              <Search className="h-5 w-5 text-accent" />
+            </div>
+            <h4 className="font-bold text-lg">Recherche de Résultats</h4>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Type de Recherche</label>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-4">
+              <label className="text-base font-semibold">Type de Recherche</label>
               <Select value={searchType} onValueChange={setSearchType}>
-                <SelectTrigger className="bg-background">
+                <SelectTrigger className="bg-gradient-neumorphic-inset shadow-neumorphic-inset border-0 rounded-2xl h-12">
                   <SelectValue placeholder="Type de recherche" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-gradient-neumorphic shadow-neumorphic border-0 rounded-xl">
                   {searchTypes.map((type) => (
-                    <SelectItem key={type.value} value={type.value}>
-                      <div className="flex items-center gap-2">
-                        <type.icon className="h-4 w-4" />
+                    <SelectItem key={type.value} value={type.value} className="rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <type.icon className="h-5 w-5" />
                         {type.label}
                       </div>
                     </SelectItem>
@@ -121,9 +129,9 @@ export const SearchFilters = ({
               </Select>
             </div>
 
-            <div className="space-y-2 md:col-span-2">
-              <label className="text-sm font-medium">Rechercher</label>
-              <div className="flex gap-2">
+            <div className="space-y-4 md:col-span-2">
+              <label className="text-base font-semibold">Rechercher</label>
+              <div className="flex gap-4">
                 <Input
                   placeholder={
                     searchType === "name" ? "Entrez le nom de l'étudiant..." :
@@ -132,11 +140,11 @@ export const SearchFilters = ({
                   }
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-background"
+                  className="flex-1"
                   onKeyPress={(e) => e.key === 'Enter' && onSearch()}
                 />
-                <Button onClick={onSearch} className="px-6 bg-gradient-primary">
-                  <Search className="h-4 w-4 mr-2" />
+                <Button onClick={onSearch} variant="primary" size="lg" className="px-8">
+                  <Search className="h-5 w-5 mr-3" />
                   Rechercher
                 </Button>
               </div>
@@ -145,18 +153,18 @@ export const SearchFilters = ({
         </div>
 
         {/* Active Filters */}
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="secondary" className="px-3 py-1">
-            <Calendar className="h-3 w-3 mr-1" />
+        <div className="flex flex-wrap gap-4">
+          <Badge variant="secondary" className="px-4 py-2 rounded-xl bg-gradient-neumorphic shadow-neumorphic-sm border-0">
+            <Calendar className="h-4 w-4 mr-2" />
             {selectedYear}
           </Badge>
-          <Badge variant="secondary" className="px-3 py-1">
-            <GraduationCap className="h-3 w-3 mr-1" />
+          <Badge variant="secondary" className="px-4 py-2 rounded-xl bg-gradient-neumorphic shadow-neumorphic-sm border-0">
+            <GraduationCap className="h-4 w-4 mr-2" />
             {selectedExam}
           </Badge>
           {searchQuery && (
-            <Badge variant="outline" className="px-3 py-1">
-              <Search className="h-3 w-3 mr-1" />
+            <Badge variant="outline" className="px-4 py-2 rounded-xl bg-gradient-neumorphic-inset shadow-neumorphic-inset border-0">
+              <Search className="h-4 w-4 mr-2" />
               "{searchQuery}"
             </Badge>
           )}

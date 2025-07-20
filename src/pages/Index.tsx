@@ -16,30 +16,33 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-neumorphic">
       {/* Header */}
-      <header className="bg-gradient-primary text-white shadow-elegant">
-        <div className="container mx-auto px-4 py-8">
+      <header className="bg-gradient-neumorphic shadow-neumorphic-sm border-0 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-accent/10"></div>
+        <div className="container mx-auto px-6 py-12 relative z-10">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-white/20 rounded-full">
-                <GraduationCap className="h-8 w-8" />
+            <div className="flex items-center gap-6">
+              <div className="p-4 bg-gradient-neumorphic rounded-3xl shadow-neumorphic">
+                <GraduationCap className="h-10 w-10 text-primary" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold">Examens en Guinée</h1>
-                <p className="text-white/80 mt-1">
+                <h1 className="text-4xl font-bold text-foreground bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  Examens en Guinée
+                </h1>
+                <p className="text-muted-foreground mt-2 text-lg">
                   Plateforme d'analyse des résultats d'examens nationaux
                 </p>
               </div>
             </div>
-            <div className="hidden md:flex items-center gap-6 text-white/80">
-              <div className="flex items-center gap-2">
-                <Globe className="h-5 w-5" />
-                République de Guinée
+            <div className="hidden md:flex items-center gap-8">
+              <div className="flex items-center gap-3 p-4 bg-gradient-neumorphic rounded-2xl shadow-neumorphic-sm">
+                <Globe className="h-6 w-6 text-primary" />
+                <span className="text-foreground font-medium">République de Guinée</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Award className="h-5 w-5" />
-                Ministère de l'Éducation
+              <div className="flex items-center gap-3 p-4 bg-gradient-neumorphic rounded-2xl shadow-neumorphic-sm">
+                <Award className="h-6 w-6 text-accent" />
+                <span className="text-foreground font-medium">Ministère de l'Éducation</span>
               </div>
             </div>
           </div>
@@ -47,7 +50,7 @@ const Index = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 space-y-8">
+      <main className="container mx-auto px-6 py-12 space-y-12">
         {/* Search and Filters */}
         <SearchFilters
           selectedYear={selectedYear}
@@ -77,38 +80,53 @@ const Index = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-muted border-t mt-16">
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="font-semibold mb-4 flex items-center gap-2">
-                <GraduationCap className="h-5 w-5 text-primary" />
+      <footer className="bg-gradient-neumorphic shadow-neumorphic-sm border-0 mt-20">
+        <div className="container mx-auto px-6 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="p-6 bg-gradient-neumorphic rounded-3xl shadow-neumorphic-sm">
+              <h3 className="font-bold text-xl mb-6 flex items-center gap-3">
+                <div className="p-2 bg-gradient-neumorphic rounded-xl shadow-neumorphic-sm">
+                  <GraduationCap className="h-6 w-6 text-primary" />
+                </div>
                 Examens en Guinée
               </h3>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-muted-foreground leading-relaxed">
                 Plateforme officielle d'analyse et de consultation des résultats 
                 d'examens nationaux en République de Guinée.
               </p>
             </div>
-            <div>
-              <h4 className="font-semibold mb-4">Examens Disponibles</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Baccalauréat (BAC)</li>
-                <li>• Brevet d'Études du Premier Cycle (BEPC)</li>
-                <li>• Certificat d'Études Élémentaires (CEE)</li>
+            <div className="p-6 bg-gradient-neumorphic rounded-3xl shadow-neumorphic-sm">
+              <h4 className="font-bold text-lg mb-6">Examens Disponibles</h4>
+              <ul className="space-y-3 text-muted-foreground">
+                <li className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  Baccalauréat (BAC)
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-accent rounded-full"></div>
+                  Brevet d'Études du Premier Cycle (BEPC)
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-success rounded-full"></div>
+                  Certificat d'Études Élémentaires (CEE)
+                </li>
               </ul>
             </div>
-            <div>
-              <h4 className="font-semibold mb-4">Contact</h4>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <p>Ministère de l'Éducation Nationale</p>
+            <div className="p-6 bg-gradient-neumorphic rounded-3xl shadow-neumorphic-sm">
+              <h4 className="font-bold text-lg mb-6">Contact</h4>
+              <div className="space-y-3 text-muted-foreground">
+                <p className="font-medium">Ministère de l'Éducation Nationale</p>
                 <p>République de Guinée</p>
                 <p>Conakry, Guinée</p>
               </div>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-            <p>&copy; 2025 Examens en Guinée. Tous droits réservés.</p>
+          <div className="mt-12 pt-8 border-t border-border/20 text-center">
+            <div className="p-4 bg-gradient-neumorphic-inset rounded-2xl shadow-neumorphic-inset inline-block">
+              <p className="text-muted-foreground font-medium">
+                &copy; Examens en Guinée. Sponsorisé par GS Saint Jean, Tous droits réservés.
+              </p>
+            </div>
           </div>
         </div>
       </footer>
