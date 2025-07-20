@@ -95,7 +95,31 @@ async function startServer() {
       
       if (fs.existsSync(dataDir)) {
         const importer = new CSVImporter();
-        await importer.importMultipleFiles(dataDir, 2025, 'BEPC');
+        
+        // Import BEPC data
+        const bepcFiles = fs.readdirSync(dataDir).filter(file => 
+          file.includes('BEPC') && file.endsWith('.csv')
+        );
+        
+        if (bepcFiles.length > 0) {
+          console.log('📚 Importing BEPC data...');
+          for (const file of bepcFiles) {
+            await importer.importFromCSV(path.join(dataDir, file), 2025, 'BEPC');
+          }
+        }
+        
+        // Import CEE data
+        const ceeFiles = fs.readdirSync(dataDir).filter(file => 
+          file.includes('CEE') && file.endsWith('.csv')
+        );
+        
+        if (ceeFiles.length > 0) {
+          console.log('📚 Importing CEE data...');
+          for (const file of ceeFiles) {
+            await importer.importFromCSV(path.join(dataDir, file), 2025, 'CEE');
+          }
+        }
+        
         console.log('✅ Data import completed');
       } else {
         console.log('⚠️ No data directory found, starting with empty database');

@@ -6,6 +6,7 @@ import { ExamService } from '../services/examService';
 
 interface CSVRow {
   IRE: string;
+  'DPE/DCE': string;
   Rang: string;
   ex: string;
   'Prénoms et Noms': string;
@@ -27,7 +28,7 @@ export class CSVImporter {
 
     return new Promise((resolve, reject) => {
       fs.createReadStream(filePath)
-        .pipe(csv(['IRE', 'Rang', 'ex', 'Prénoms et Noms', 'Centre', 'PV', 'Origine', 'Mention']))
+        .pipe(csv(['IRE', 'DPE/DCE', 'Rang', 'ex', 'Prénoms et Noms', 'Centre', 'PV', 'Origine', 'Mention']))
         .on('data', (row: CSVRow) => {
           try {
             lineCount++;
