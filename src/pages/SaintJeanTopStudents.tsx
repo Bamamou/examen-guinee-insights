@@ -167,7 +167,7 @@ const SaintJeanTopStudents = () => {
                 </h1>
               </div>
               <p className="text-muted-foreground text-sm">
-                Les 10 meilleurs étudiants de l'École SAINT JEAN
+                Les 10 meilleurs élèves de l'École SAINT JEAN
               </p>
             </div>
           </div>
@@ -184,7 +184,7 @@ const SaintJeanTopStudents = () => {
                 </h1>
               </div>
               <p className="text-muted-foreground text-lg">
-                Les 10 meilleurs étudiants de l'École SAINT JEAN par classement
+                Les 10 meilleurs élèves de l'École SAINT JEAN par classement
               </p>
             </div>
             
@@ -281,7 +281,7 @@ const SaintJeanTopStudents = () => {
             <CardContent className="py-12 text-center">
               <div className="flex flex-col items-center gap-4">
                 <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-muted-foreground font-medium">Chargement des meilleurs étudiants...</p>
+                <p className="text-muted-foreground font-medium">Chargement des meilleurs élèves...</p>
               </div>
             </CardContent>
           </Card>
@@ -293,7 +293,7 @@ const SaintJeanTopStudents = () => {
               <div className="flex flex-col items-center gap-4">
                 <School className="h-12 w-12 text-muted-foreground" />
                 <p className="text-muted-foreground font-medium text-sm sm:text-base">
-                  Aucun étudiant trouvé pour SAINT JEAN dans {selectedExam} {selectedYear}
+                  Aucun élève trouvé pour SAINT JEAN dans {selectedExam} {selectedYear}
                 </p>
               </div>
             </CardContent>

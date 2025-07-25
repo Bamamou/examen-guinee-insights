@@ -45,7 +45,7 @@ export const SearchFilters = ({
     { value: "SS", label: "SS - Sciences Sociales", description: "Sciences Humaines et Sociales" }
   ];
   const searchTypes = [
-    { value: "name", label: "Nom de l'étudiant", icon: User },
+    { value: "name", label: "Nom de l'élève", icon: User },
     { value: "pv", label: "Numéro PV", icon: Filter },
     { value: "school", label: "École", icon: School }
   ];
@@ -175,7 +175,7 @@ export const SearchFilters = ({
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <Input
                   placeholder={
-                    searchType === "name" ? "Entrez le nom de l'étudiant..." :
+                    searchType === "name" ? "Entrez le nom de l'élève..." :
                     searchType === "pv" ? "Entrez le numéro PV..." :
                     "Entrez le nom de l'école..."
                   }
