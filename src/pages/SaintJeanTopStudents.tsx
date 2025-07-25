@@ -114,10 +114,10 @@ const SaintJeanTopStudents = () => {
   }, [selectedYear, selectedExam]);
 
   const getRankIcon = (rank: number) => {
-    if (rank === 1) return <Crown className="h-6 w-6 text-yellow-500" />;
-    if (rank === 2) return <Trophy className="h-6 w-6 text-gray-400" />;
-    if (rank === 3) return <Medal className="h-6 w-6 text-amber-600" />;
-    return <Award className="h-5 w-5 text-blue-500" />;
+    if (rank === 1) return <Crown className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-500" />;
+    if (rank === 2) return <Trophy className="h-5 w-5 sm:h-6 sm:w-6 text-gray-400" />;
+    if (rank === 3) return <Medal className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600" />;
+    return <Award className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500" />;
   };
 
   const getRankStyle = (rank: number) => {
@@ -141,8 +141,39 @@ const SaintJeanTopStudents = () => {
       {/* Header */}
       <header className="bg-gradient-neumorphic shadow-neumorphic-sm border-0 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-accent/10"></div>
-        <div className="container mx-auto px-6 py-12 relative z-10">
-          <div className="flex items-center justify-between">
+        <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-12 relative z-10">
+          {/* Mobile Layout */}
+          <div className="md:hidden">
+            <div className="flex items-center justify-between mb-4">
+              <Link to="/">
+                <Button size="sm" className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-neumorphic-sm border-0 rounded-xl px-3 py-2">
+                  <ArrowLeft className="h-4 w-4 mr-1" />
+                  <span className="text-xs">Retour</span>
+                </Button>
+              </Link>
+              <Link to="/">
+                <Button size="sm" className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-neumorphic-sm border-0 rounded-xl">
+                  <Home className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-3 mb-3">
+                <div className="p-3 bg-gradient-neumorphic rounded-2xl shadow-neumorphic">
+                  <School className="h-6 w-6 text-primary" />
+                </div>
+                <h1 className="text-xl font-bold text-foreground bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  Top 10 - SAINT JEAN
+                </h1>
+              </div>
+              <p className="text-muted-foreground text-sm">
+                Les 10 meilleurs étudiants de l'École SAINT JEAN
+              </p>
+            </div>
+          </div>
+
+          {/* Desktop Layout */}
+          <div className="hidden md:flex items-center justify-between">
             <div className="text-center flex-1">
               <div className="flex items-center justify-center gap-4 mb-4">
                 <div className="p-4 bg-gradient-neumorphic rounded-3xl shadow-neumorphic">
@@ -166,36 +197,27 @@ const SaintJeanTopStudents = () => {
                 </Button>
               </Link>
             </div>
-            
-            {/* Home Button for mobile */}
-            <div className="absolute right-6 top-1/2 transform -translate-y-1/2 md:hidden">
-              <Link to="/">
-                <Button size="sm" className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-neumorphic-sm border-0 rounded-xl">
-                  <Home className="h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
           </div>
         </div>
       </header>
 
       {/* Filters */}
-      <div className="container mx-auto px-6 py-8">
-        <Card className="shadow-neumorphic bg-gradient-neumorphic border-0 mb-8">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3 text-xl">
-              <div className="p-2 bg-gradient-neumorphic rounded-xl shadow-neumorphic-sm">
-                <Calendar className="h-5 w-5 text-primary" />
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <Card className="shadow-neumorphic bg-gradient-neumorphic border-0 mb-6 sm:mb-8">
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="flex items-center gap-2 sm:gap-3 text-lg sm:text-xl">
+              <div className="p-1.5 sm:p-2 bg-gradient-neumorphic rounded-lg sm:rounded-xl shadow-neumorphic-sm">
+                <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
               Sélectionner l'année et l'examen
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+          <CardContent className="p-4 sm:p-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-end">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Année</label>
+                <label className="text-xs sm:text-sm font-medium text-foreground">Année</label>
                 <Select value={selectedYear} onValueChange={setSelectedYear}>
-                  <SelectTrigger className="bg-gradient-neumorphic-inset shadow-neumorphic-inset border-0 rounded-xl">
+                  <SelectTrigger className="bg-gradient-neumorphic-inset shadow-neumorphic-inset border-0 rounded-lg sm:rounded-xl h-10 sm:h-12 text-sm sm:text-base">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-gradient-neumorphic shadow-neumorphic border-0 rounded-xl">
@@ -209,14 +231,14 @@ const SaintJeanTopStudents = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Type d'examen</label>
+                <label className="text-xs sm:text-sm font-medium text-foreground">Type d'examen</label>
                 <Select value={selectedExam} onValueChange={setSelectedExam}>
-                  <SelectTrigger className="bg-gradient-neumorphic-inset shadow-neumorphic-inset border-0 rounded-xl">
+                  <SelectTrigger className="bg-gradient-neumorphic-inset shadow-neumorphic-inset border-0 rounded-lg sm:rounded-xl h-10 sm:h-12 text-sm sm:text-base">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-gradient-neumorphic shadow-neumorphic border-0 rounded-xl">
                     {examTypes.map((exam) => (
-                      <SelectItem key={exam.value} value={exam.value} className="rounded-lg">
+                      <SelectItem key={exam.value} value={exam.value} className="rounded-lg text-sm sm:text-base">
                         {exam.label}
                       </SelectItem>
                     ))}
@@ -227,9 +249,19 @@ const SaintJeanTopStudents = () => {
               <Button 
                 onClick={fetchTopStudents}
                 disabled={loading}
-                className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-neumorphic-sm border-0 rounded-xl h-11"
+                className="bg-gradient-to-r from-primary to-primary-glow text-white shadow-neumorphic-sm border-0 rounded-lg sm:rounded-xl px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base h-10 sm:h-12"
               >
-                {loading ? 'Chargement...' : 'Actualiser'}
+                {loading ? (
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Chargement...
+                  </div>
+                ) : (
+                  <>
+                    <Star className="h-4 w-4 mr-2" />
+                    Actualiser
+                  </>
+                )}
               </Button>
             </div>
           </CardContent>
@@ -237,134 +269,130 @@ const SaintJeanTopStudents = () => {
 
         {/* Results */}
         {error && (
-          <Card className="shadow-neumorphic bg-gradient-neumorphic border-0 mb-8">
-            <CardContent className="py-8 text-center">
-              <p className="text-red-600 font-medium">{error}</p>
+          <Card className="shadow-neumorphic bg-gradient-neumorphic border-0 mb-6 sm:mb-8">
+            <CardContent className="py-6 sm:py-8 text-center">
+              <p className="text-red-600 font-medium text-sm sm:text-base">{error}</p>
             </CardContent>
           </Card>
         )}
 
-        {loading ? (
-          <div className="text-center py-12">
-            <div className="inline-block p-6 bg-gradient-neumorphic rounded-3xl shadow-neumorphic">
-              <GraduationCap className="h-8 w-8 text-primary animate-pulse" />
-            </div>
-            <p className="mt-4 text-muted-foreground">Chargement des meilleurs étudiants...</p>
-          </div>
-        ) : students.length === 0 ? (
-          <Card className="shadow-neumorphic bg-gradient-neumorphic border-0">
+        {loading && (
+          <Card className="shadow-neumorphic bg-gradient-neumorphic border-0 mb-6 sm:mb-8">
             <CardContent className="py-12 text-center">
-              <School className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-foreground mb-2">Aucun étudiant trouvé</h3>
-              <p className="text-muted-foreground">
-                Aucun résultat trouvé pour l'École SAINT JEAN en {selectedYear} pour l'examen {selectedExam}
-              </p>
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-muted-foreground font-medium">Chargement des meilleurs étudiants...</p>
+              </div>
             </CardContent>
           </Card>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {students.map((student, index) => (
-              <Card 
-                key={`${student.pv_number}-${student.rank}`}
-                className={`shadow-neumorphic border-0 overflow-hidden transform hover:scale-105 transition-transform duration-300 ${
-                  student.rank <= 3 ? 'ring-2 ring-opacity-50' : ''
-                } ${
-                  student.rank === 1 ? 'ring-yellow-400' : 
-                  student.rank === 2 ? 'ring-gray-400' : 
-                  student.rank === 3 ? 'ring-amber-400' : ''
-                }`}
-              >
-                <CardHeader className={`text-center py-6 ${getRankStyle(student.rank)}`}>
-                  <div className="flex flex-col items-center gap-3">
-                    {getRankIcon(student.rank)}
-                    <div>
-                      <h3 className="text-lg font-bold">Rang #{student.rank}</h3>
-                      <p className="text-sm opacity-90">École SAINT JEAN</p>
-                    </div>
-                  </div>
-                </CardHeader>
-                
-                <CardContent className="p-6 bg-gradient-neumorphic">
-                  <div className="space-y-4">
-                    {/* Student Name */}
-                    <div className="text-center">
-                      <div className="p-3 bg-gradient-neumorphic-inset rounded-full w-16 h-16 mx-auto mb-3 flex items-center justify-center shadow-neumorphic-inset">
-                        <User className="h-8 w-8 text-primary" />
-                      </div>
-                      <h4 className="font-bold text-foreground text-lg leading-tight">
-                        {student.student_name}
-                      </h4>
-                    </div>
-
-                    {/* Student Details */}
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3 p-2 bg-gradient-neumorphic-inset rounded-lg shadow-neumorphic-inset">
-                        <FileText className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">
-                          <span className="font-medium">PV:</span> {student.pv_number}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-3 p-2 bg-gradient-neumorphic-inset rounded-lg shadow-neumorphic-inset">
-                        <MapPin className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">
-                          <span className="font-medium">Centre:</span> {student.center}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-3 p-2 bg-gradient-neumorphic-inset rounded-lg shadow-neumorphic-inset">
-                        <MapPin className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">
-                          <span className="font-medium">Région:</span> {student.region}
-                        </span>
-                      </div>
-
-                      {/* Mention Badge */}
-                      <div className="flex justify-center">
-                        <Badge 
-                          className={`${getMentionColor(student.mention)} border font-medium px-3 py-1 rounded-full`}
-                        >
-                          {student.mention === 'Non spécifié' ? 'Passable' : student.mention}
-                        </Badge>
-                      </div>
-                    </div>
-
-                    {/* Special badges for top 3 */}
-                    {student.rank <= 3 && (
-                      <div className="flex justify-center pt-2">
-                        <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-yellow-400/20 to-amber-400/20 rounded-full border border-yellow-400/30">
-                          <Star className="h-3 w-3 text-yellow-600" />
-                          <span className="text-xs font-medium text-yellow-700">
-                            Top {student.rank}
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
         )}
 
-        {/* Summary */}
-        {students.length > 0 && (
-          <Card className="shadow-neumorphic bg-gradient-neumorphic border-0 mt-8">
-            <CardContent className="py-6">
-              <div className="text-center">
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  Résumé - École SAINT JEAN
-                </h3>
-                <p className="text-muted-foreground">
-                  {students.length} étudiant{students.length > 1 ? 's' : ''} affiché{students.length > 1 ? 's' : ''} 
-                  pour l'examen {selectedExam} {selectedYear}
-                </p>
-                <p className="text-sm text-muted-foreground mt-2">
-                  Meilleur rang: #{students[0]?.rank} - {students[0]?.student_name}
+        {!loading && !error && students.length === 0 && (
+          <Card className="shadow-neumorphic bg-gradient-neumorphic border-0 mb-6 sm:mb-8">
+            <CardContent className="py-12 text-center">
+              <div className="flex flex-col items-center gap-4">
+                <School className="h-12 w-12 text-muted-foreground" />
+                <p className="text-muted-foreground font-medium text-sm sm:text-base">
+                  Aucun étudiant trouvé pour SAINT JEAN dans {selectedExam} {selectedYear}
                 </p>
               </div>
             </CardContent>
           </Card>
+        )}
+
+        {!loading && !error && students.length > 0 && (
+          <>
+            <div className="mb-6 sm:mb-8 text-center">
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">
+                Top {students.length} - École SAINT JEAN
+              </h2>
+              <p className="text-muted-foreground text-sm sm:text-base">
+                {selectedExam} {selectedYear} - Classés par rang
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+              {students.map((student, index) => (
+                <Card
+                  key={`${student.pv_number}-${student.rank}`}
+                  className={`shadow-neumorphic border-0 overflow-hidden transform hover:scale-105 transition-transform duration-300 ${
+                    student.rank <= 3 ? 'ring-2 ring-opacity-50' : ''
+                  } ${
+                    student.rank === 1 ? 'ring-yellow-400' : 
+                    student.rank === 2 ? 'ring-gray-400' : 
+                    student.rank === 3 ? 'ring-amber-400' : ''
+                  }`}
+                >
+                  <CardHeader className={`text-center py-4 sm:py-6 ${getRankStyle(student.rank)}`}>
+                    <div className="flex flex-col items-center gap-2 sm:gap-3">
+                      {getRankIcon(student.rank)}
+                      <div>
+                        <h3 className="text-base sm:text-lg font-bold">Rang #{student.rank}</h3>
+                        <p className="text-xs sm:text-sm opacity-90">École SAINT JEAN</p>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  
+                  <CardContent className="p-4 sm:p-6 bg-gradient-neumorphic">
+                    <div className="space-y-3 sm:space-y-4">
+                      {/* Student Name */}
+                      <div className="text-center">
+                        <div className="p-2 sm:p-3 bg-gradient-neumorphic-inset rounded-full w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-3 flex items-center justify-center shadow-neumorphic-inset">
+                          <User className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+                        </div>
+                        <h4 className="font-bold text-foreground text-sm sm:text-lg leading-tight">
+                          {student.student_name}
+                        </h4>
+                      </div>
+
+                      {/* Student Details */}
+                      <div className="space-y-2 sm:space-y-3">
+                        <div className="flex items-center gap-2 sm:gap-3 p-2 bg-gradient-neumorphic-inset rounded-lg shadow-neumorphic-inset">
+                          <FileText className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
+                          <span className="text-xs sm:text-sm">
+                            <span className="font-medium">PV:</span> {student.pv_number}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2 sm:gap-3 p-2 bg-gradient-neumorphic-inset rounded-lg shadow-neumorphic-inset">
+                          <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
+                          <span className="text-xs sm:text-sm">
+                            <span className="font-medium">Centre:</span> {student.center}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2 sm:gap-3 p-2 bg-gradient-neumorphic-inset rounded-lg shadow-neumorphic-inset">
+                          <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
+                          <span className="text-xs sm:text-sm">
+                            <span className="font-medium">Région:</span> {student.region}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2 sm:gap-3 p-2 bg-gradient-neumorphic-inset rounded-lg shadow-neumorphic-inset">
+                          <School className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
+                          <span className="text-xs sm:text-sm">
+                            <span className="font-medium">École:</span> {student.school_origin}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Mention Badge */}
+                      <div className="text-center pt-2">
+                        <Badge 
+                          className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium border ${getMentionColor(student.mention)}`}
+                        >
+                          {student.mention === 'TBIEN' ? 'Très Bien' :
+                           student.mention === 'BIEN' ? 'Bien' :
+                           student.mention === 'ABIEN' ? 'Assez Bien' :
+                           student.mention}
+                        </Badge>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </>
         )}
       </div>
     </div>
