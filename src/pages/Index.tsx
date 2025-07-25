@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Dashboard } from "@/components/Dashboard";
 import { SearchFilters } from "@/components/SearchFilters";
 import { ResultsTable } from "@/components/ResultsTable";
-import { GraduationCap, Globe, Award } from "lucide-react";
+import { GraduationCap, Globe, Award, School, Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const [selectedYear, setSelectedYear] = useState("2025");
@@ -55,7 +57,16 @@ const Index = () => {
                 </p>
               </div>
             </div>
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden md:flex items-center gap-4">
+              {/* Saint Jean Top Students Button */}
+              <Link to="/saint-jean-top">
+                <Button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-neumorphic-sm border-0 rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105">
+                  <School className="h-5 w-5 mr-2" />
+                  Top 10 SAINT JEAN
+                  <Star className="h-4 w-4 ml-2" />
+                </Button>
+              </Link>
+              
               <div className="flex items-center gap-3 p-4 bg-gradient-neumorphic rounded-2xl shadow-neumorphic-sm">
                 <Globe className="h-6 w-6 text-primary" />
                 <span className="text-foreground font-medium">République de Guinée</span>
@@ -64,6 +75,16 @@ const Index = () => {
                 <Award className="h-6 w-6 text-accent" />
                 <span className="text-foreground font-medium">Ministère de l'Éducation</span>
               </div>
+            </div>
+            
+            {/* Mobile Navigation */}
+            <div className="md:hidden">
+              <Link to="/saint-jean-top">
+                <Button size="sm" className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-neumorphic-sm border-0 rounded-xl">
+                  <School className="h-4 w-4 mr-1" />
+                  SAINT JEAN
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
