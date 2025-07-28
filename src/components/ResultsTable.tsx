@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { User, School, MapPin, Award, ChevronLeft, ChevronRight } from "lucide-react";
+import { User, School, MapPin, Award, ChevronLeft, ChevronRight, Crown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { examAPI, ExamResult } from '../lib/api';
 
@@ -88,6 +88,14 @@ export const ResultsTable = ({ searchQuery, searchType, selectedExam, selectedYe
       default:
         return <Badge variant="secondary" className="rounded-xl">{grade}</Badge>;
     }
+  };
+
+  // Check if student qualifies for "Lauréat" badge for BAC exams
+  const isLaureat = (examType: string, rank: number) => {
+    if (examType === 'BAC-SM' && rank >= 1 && rank <= 70) return true;
+    if (examType === 'BAC-SE' && rank >= 1 && rank <= 60) return true;
+    if (examType === 'BAC-SS' && rank >= 1 && rank <= 40) return true;
+    return false;
   };
 
   if (!searchQuery) {
@@ -185,9 +193,18 @@ export const ResultsTable = ({ searchQuery, searchType, selectedExam, selectedYe
                       <TableCell className="py-4">{result.school_origin}</TableCell>
                       <TableCell className="py-4">{result.region}</TableCell>
                       <TableCell className="py-4">
-                        <span className="font-bold text-lg text-muted-foreground">
-                          Rang #{result.rank}
-                        </span>
+                        <div className="flex flex-col gap-2">
+                          <span className="font-bold text-lg text-muted-foreground">
+                            Rang #{result.rank}
+                          </span>
+                          {/* Lauréat Badge for BAC students */}
+                          {isLaureat(result.exam_type, result.rank) && (
+                            <Badge className="bg-gradient-to-r from-amber-400 to-yellow-500 text-amber-900 shadow-neumorphic-sm rounded-xl font-bold text-xs w-fit">
+                              <Crown className="h-3 w-3 mr-1" />
+                              Lauréat
+                            </Badge>
+                          )}
+                        </div>
                       </TableCell>
                       <TableCell className="py-4">
                         {getGradeBadge(result.mention, Boolean(result.passed))}

@@ -58,13 +58,18 @@ const SaintJeanTopStudents = () => {
         year: parseInt(selectedYear),
         examType: selectedExam,
         school: "SAINT JEAN",
-        limit: 10,
+        limit: 100, // Get more results to filter
         offset: 0
       });
 
       if (response.success) {
+        // Filter for exact "SAINT JEAN" school name only
+        const exactSaintJeanStudents = response.data.results.filter(student => 
+          student.school_origin.trim().toUpperCase() === "SAINT JEAN"
+        );
+        
         // Sort by rank to ensure we get the top 10
-        const sortedStudents = response.data.results
+        const sortedStudents = exactSaintJeanStudents
           .sort((a, b) => a.rank - b.rank)
           .slice(0, 10);
         setStudents(sortedStudents);
@@ -89,13 +94,18 @@ const SaintJeanTopStudents = () => {
           year: parseInt(selectedYear),
           examType: selectedExam,
           school: "SAINT JEAN",
-          limit: 10,
+          limit: 100, // Get more results to filter
           offset: 0
         });
 
         if (response.success) {
+          // Filter for exact "SAINT JEAN" school name only
+          const exactSaintJeanStudents = response.data.results.filter(student => 
+            student.school_origin.trim().toUpperCase() === "SAINT JEAN"
+          );
+          
           // Sort by rank to ensure we get the top 10
-          const sortedStudents = response.data.results
+          const sortedStudents = exactSaintJeanStudents
             .sort((a, b) => a.rank - b.rank)
             .slice(0, 10);
           setStudents(sortedStudents);
@@ -124,6 +134,7 @@ const SaintJeanTopStudents = () => {
     if (rank === 1) return "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow-lg transform scale-105";
     if (rank === 2) return "bg-gradient-to-r from-gray-300 to-gray-500 text-white shadow-md";
     if (rank === 3) return "bg-gradient-to-r from-amber-400 to-amber-600 text-white shadow-md";
+    if (rank >= 4 && rank <= 5) return "bg-gradient-to-r from-green-400 to-green-600 text-white shadow-md";
     return "bg-gradient-to-r from-blue-400 to-blue-600 text-white";
   };
 
@@ -134,6 +145,14 @@ const SaintJeanTopStudents = () => {
       case 'ABIEN': return 'bg-purple-100 text-purple-800 border-purple-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
+  };
+
+  // Check if student qualifies for "Lauréat" badge for BAC exams
+  const isLaureat = (examType: string, rank: number) => {
+    if (examType === 'BAC-SM' && rank >= 1 && rank <= 70) return true;
+    if (examType === 'BAC-SE' && rank >= 1 && rank <= 60) return true;
+    if (examType === 'BAC-SS' && rank >= 1 && rank <= 40) return true;
+    return false;
   };
 
   return (
@@ -316,11 +335,12 @@ const SaintJeanTopStudents = () => {
                 <Card
                   key={`${student.pv_number}-${student.rank}`}
                   className={`shadow-neumorphic border-0 overflow-hidden transform hover:scale-105 transition-transform duration-300 ${
-                    student.rank <= 3 ? 'ring-2 ring-opacity-50' : ''
+                    student.rank <= 5 ? 'ring-2 ring-opacity-50' : ''
                   } ${
                     student.rank === 1 ? 'ring-yellow-400' : 
                     student.rank === 2 ? 'ring-gray-400' : 
-                    student.rank === 3 ? 'ring-amber-400' : ''
+                    student.rank === 3 ? 'ring-amber-400' : 
+                    student.rank >= 4 && student.rank <= 5 ? 'ring-green-400' : ''
                   }`}
                 >
                   <CardHeader className={`text-center py-4 sm:py-6 ${getRankStyle(student.rank)}`}>
@@ -387,6 +407,30 @@ const SaintJeanTopStudents = () => {
                            student.mention}
                         </Badge>
                       </div>
+
+                      {/* Top 5 Star Badge */}
+                      {student.rank >= 1 && student.rank <= 5 && (
+                        <div className="text-center pt-2">
+                          <div className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 bg-gradient-to-r from-yellow-400/20 to-amber-400/20 rounded-full border border-yellow-400/30">
+                            <Star className="h-3 w-3 text-yellow-600 fill-yellow-600" />
+                            <span className="text-xs font-medium text-yellow-700">
+                              Top {student.rank}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Lauréat Badge for BAC students */}
+                      {isLaureat(student.exam_type, student.rank) && (
+                        <div className="text-center pt-2">
+                          <div className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 bg-gradient-to-r from-amber-400/20 to-yellow-500/20 rounded-full border border-amber-400/30">
+                            <Crown className="h-3 w-3 text-amber-600 fill-amber-600" />
+                            <span className="text-xs sm:text-sm font-medium text-amber-700">
+                              Lauréat
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
