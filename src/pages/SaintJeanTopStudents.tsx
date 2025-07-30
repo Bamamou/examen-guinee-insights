@@ -17,7 +17,8 @@ import {
   Crown,
   GraduationCap,
   ArrowLeft,
-  Home
+  Home,
+  ExternalLink
 } from "lucide-react";
 import { examAPI } from '../lib/api';
 
@@ -152,6 +153,12 @@ const SaintJeanTopStudents = () => {
     if (examType === 'BAC-SM' && rank >= 1 && rank <= 70) return true;
     if (examType === 'BAC-SE' && rank >= 1 && rank <= 60) return true;
     if (examType === 'BAC-SS' && rank >= 1 && rank <= 40) return true;
+    return false;
+  };
+
+  // Check if student qualifies for "Star" badge for BEPC/CEE exams (top 5 performers)
+  const isStar = (examType: string, rank: number) => {
+    if ((examType === 'BEPC' || examType === 'CEE') && rank >= 1 && rank <= 5) return true;
     return false;
   };
 
@@ -422,13 +429,45 @@ const SaintJeanTopStudents = () => {
 
                       {/* Lauréat Badge for BAC students */}
                       {isLaureat(student.exam_type, student.rank) && (
-                        <div className="text-center pt-2">
+                        <div className="text-center pt-2 space-y-2">
                           <div className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 bg-gradient-to-r from-amber-400/20 to-yellow-500/20 rounded-full border border-amber-400/30">
                             <Crown className="h-3 w-3 text-amber-600 fill-amber-600" />
                             <span className="text-xs sm:text-sm font-medium text-amber-700">
                               Lauréat
                             </span>
                           </div>
+                          
+                          {/* Portfolio Button for BAC Lauréats */}
+                          <div>
+                            <Link to={`/portfolio/${student.exam_type}/${student.year}/${student.pv_number}`}>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="rounded-xl border-2 border-amber-200 bg-gradient-to-r from-amber-50 to-yellow-50 hover:from-amber-100 hover:to-yellow-100 text-amber-800 hover:text-amber-900 shadow-neumorphic-sm hover:shadow-neumorphic transition-all duration-300 text-xs font-medium"
+                              >
+                                <FileText className="h-3 w-3 mr-1.5" />
+                                Portfolio
+                                <ExternalLink className="h-3 w-3 ml-1.5" />
+                              </Button>
+                            </Link>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Portfolio Button for BEPC/CEE Stars (Top 5) */}
+                      {isStar(student.exam_type, student.rank) && (
+                        <div className="text-center pt-2">
+                          <Link to={`/portfolio/${student.exam_type}/${student.year}/${student.pv_number}`}>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="rounded-xl border-2 border-yellow-200 bg-gradient-to-r from-yellow-50 to-amber-50 hover:from-yellow-100 hover:to-amber-100 text-yellow-800 hover:text-yellow-900 shadow-neumorphic-sm hover:shadow-neumorphic transition-all duration-300 text-xs font-medium"
+                            >
+                              <FileText className="h-3 w-3 mr-1.5" />
+                              Portfolio
+                              <ExternalLink className="h-3 w-3 ml-1.5" />
+                            </Button>
+                          </Link>
                         </div>
                       )}
                     </div>

@@ -2,8 +2,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { User, School, MapPin, Award, ChevronLeft, ChevronRight, Crown } from "lucide-react";
+import { User, School, MapPin, Award, ChevronLeft, ChevronRight, Crown, FileText, ExternalLink, Star } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { examAPI, ExamResult } from '../lib/api';
 
 interface ResultsTableProps {
@@ -98,6 +99,12 @@ export const ResultsTable = ({ searchQuery, searchType, selectedExam, selectedYe
     return false;
   };
 
+  // Check if student qualifies for "Star" badge for BEPC/CEE exams (top 5 performers)
+  const isStar = (examType: string, rank: number) => {
+    if ((examType === 'BEPC' || examType === 'CEE') && rank >= 1 && rank <= 5) return true;
+    return false;
+  };
+
   if (!searchQuery) {
     return (
       <Card className="shadow-neumorphic border-0 p-8">
@@ -183,6 +190,7 @@ export const ResultsTable = ({ searchQuery, searchType, selectedExam, selectedYe
                     </TableHead>
                     <TableHead className="font-bold text-base">Rang</TableHead>
                     <TableHead className="font-bold text-base">Résultat</TableHead>
+                    <TableHead className="font-bold text-base">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -204,10 +212,55 @@ export const ResultsTable = ({ searchQuery, searchType, selectedExam, selectedYe
                               Lauréat
                             </Badge>
                           )}
+                          {/* Star Badge for BEPC/CEE top students */}
+                          {isStar(result.exam_type, result.rank) && (
+                            <Badge className="bg-gradient-to-r from-yellow-400 to-amber-400 text-yellow-900 shadow-neumorphic-sm rounded-xl font-bold text-xs w-fit">
+                              <Star className="h-3 w-3 mr-1 fill-yellow-600" />
+                              Top {result.rank}
+                            </Badge>
+                          )}
                         </div>
                       </TableCell>
                       <TableCell className="py-4">
                         {getGradeBadge(result.mention, Boolean(result.passed))}
+                      </TableCell>
+                      <TableCell className="py-4">
+                        <div className="flex flex-col gap-2">
+                          {/* Portfolio Button for BAC Lauréats */}
+                          {isLaureat(result.exam_type, result.rank) && (
+                            <Link to={`/portfolio/${result.exam_type}/${result.year}/${result.pv_number}`}>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="rounded-xl border-2 border-amber-200 bg-gradient-to-r from-amber-50 to-yellow-50 hover:from-amber-100 hover:to-yellow-100 text-amber-800 hover:text-amber-900 shadow-neumorphic-sm hover:shadow-neumorphic transition-all duration-300 text-xs font-medium"
+                              >
+                                <FileText className="h-3 w-3 mr-1.5" />
+                                Portfolio
+                                <ExternalLink className="h-3 w-3 ml-1.5" />
+                              </Button>
+                            </Link>
+                          )}
+                          {/* Portfolio Button for BEPC/CEE Star students */}
+                          {isStar(result.exam_type, result.rank) && (
+                            <Link to={`/portfolio/${result.exam_type}/${result.year}/${result.pv_number}`}>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="rounded-xl border-2 border-yellow-200 bg-gradient-to-r from-yellow-50 to-amber-50 hover:from-yellow-100 hover:to-amber-100 text-yellow-800 hover:text-yellow-900 shadow-neumorphic-sm hover:shadow-neumorphic transition-all duration-300 text-xs font-medium"
+                              >
+                                <FileText className="h-3 w-3 mr-1.5" />
+                                Portfolio
+                                <ExternalLink className="h-3 w-3 ml-1.5" />
+                              </Button>
+                            </Link>
+                          )}
+                          {/* Placeholder for non-eligible students */}
+                          {!isLaureat(result.exam_type, result.rank) && !isStar(result.exam_type, result.rank) && (
+                            <span className="text-xs text-muted-foreground italic">
+                              -
+                            </span>
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
